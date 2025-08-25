@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { UserProfileResponse } from '../interfaces/user-profile-response';
+import { UserProfileResponse } from '../interfaces/user/user-profile-response';
 
 @Injectable({
   providedIn: 'root'

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ResetPasswordRequest } from '../../../core/interfaces/reset-password-request';
+import { ResetPasswordRequest } from '../../../core/interfaces/auth/reset-password-request';
 import { AuthService } from '../../../core/services/auth.service';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';

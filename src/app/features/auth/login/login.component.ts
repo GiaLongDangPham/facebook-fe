@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { LoginRequest } from '../../../core/interfaces/login-request';
+import { LoginRequest } from '../../../core/interfaces/auth/login-request';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../core/services/auth.service';
-import { AuthResponse } from '../../../core/interfaces/auth-response';
+import { AuthResponse } from '../../../core/interfaces/auth/auth-response';
 import { Router, RouterModule } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { TokenService } from '../../../core/services/token.service';

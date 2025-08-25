@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { UserProfileResponse } from '../../../../core/interfaces/user-profile-response';
+import { UserProfileResponse } from '../../../../core/interfaces/user/user-profile-response';
 import { CommonModule } from '@angular/common';
 
 @Component({

@@ -1,8 +1,8 @@
 import { Component, Input } from '@angular/core';
-import { UserProfileResponse } from '../../../../core/interfaces/user-profile-response';
+import { UserProfileResponse } from '../../../../core/interfaces/user/user-profile-response';
 import { UserPhotoService } from '../../../../core/services/user-photo.service';
 import { CommonModule } from '@angular/common';
-import { Photo } from '../../../../core/interfaces/photo';
+import { Photo } from '../../../../core/interfaces/user/photo';
 
 @Component({
   selector: 'app-profile-photos',

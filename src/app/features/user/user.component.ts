@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { Router, RouterModule } from "@angular/router";
-import { UserResponse } from '../../core/interfaces/user-response';
+import { UserResponse } from '../../core/interfaces/user/user-response';
 import { UserService } from '../../core/services/user.service';
 import { TokenService } from '../../core/services/token.service';
 import { AuthService } from '../../core/services/auth.service';
-import { LogoutRequest } from '../../core/interfaces/logout-request';
+import { LogoutRequest } from '../../core/interfaces/auth/logout-request';
 
 @Component({
   selector: 'app-user',

@@ -1,48 +1,88 @@
 <div class="max-w-2xl mx-auto p-4 space-y-6">
   <!-- Form tạo post -->
-  <div class="bg-white rounded-2xl shadow p-4">
-    <div class="flex items-center space-x-3">
-      <img src="https://i.pravatar.cc/100?img=5" class="w-10 h-10 rounded-full" />
-      <input 
-        type="text" 
+  <div class="bg-white rounded-2xl shadow p-4 space-y-4">
+    <div class="flex gap-2">
+      <img [src]="currentUser?.profile?.avatarUrl || 'assets/default-avatar.jpg'" 
+          class="w-12 h-12 rounded-full border-2 border-white shadow-sm" />
+      <textarea 
+        [(ngModel)]="content"
         placeholder="Bạn đang nghĩ gì thế?" 
-        class="flex-1 px-4 py-2 rounded-full border bg-gray-100 focus:outline-none"
-      />
+        class="w-full px-4 py-2 rounded-lg border bg-gray-100 focus:outline-none"
+      ></textarea>
+    </div>
+
+    <!-- Preview ảnh/video -->
+    <div class="grid grid-cols-2 sm:grid-cols-3 gap-2" *ngIf="previewUrls.length > 0">
+      <div *ngFor="let url of previewUrls; let i = index" class="relative">
+        <img [src]="url" class="w-full h-44 object-cover rounded-lg" />
+        <button (click)="removeFile(i)" 
+                class="absolute top-1 right-1 bg-black bg-opacity-60 text-white rounded-full p-1 text-xs"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+    </div>
+
+    <div class="flex items-center justify-between">
+      <input type="file" multiple (change)="onFileSelected($event)" class="hidden" #fileInput />
+      <button (click)="fileInput.click()" class="text-blue-500"><i class="fa-solid fa-camera"></i> Thêm ảnh/video</button>
+      <button (click)="createPost()"  [disabled]="isPosting"
+              class="bg-blue-500 text-white px-4 py-2 rounded-lg">Đăng</button>
     </div>
   </div>
 
   <!-- Danh sách bài viết -->
-  @for (post of posts; track post.id) { 
-    <div class="bg-white rounded-2xl shadow">
-      <div class="p-4">
-        <!-- Header -->
-        <div class="flex items-center space-x-3 mb-3">
-          <img [src]="post.avatar" class="w-10 h-10 rounded-full" />
-          <div>
-            <p class="font-semibold">{{ post.author }}</p>
-            <p class="text-sm text-gray-500">{{ post.createdAt }}</p>
-          </div>
-        </div>
-  
-        <!-- Nội dung -->
-        <p class="mb-3">{{ post.content }}</p>
-  
-        <!-- Hình ảnh -->
-        <img *ngIf="post.image" [src]="post.image" class="w-full rounded-lg mb-3" />
-  
-        <!-- Actions -->
-        <div class="flex justify-between text-gray-600 text-sm border-t pt-2">
-          <button class="flex items-center space-x-1 hover:text-blue-600">
-            👍 <span>Thích</span>
-          </button>
-          <button class="flex items-center space-x-1 hover:text-blue-600">
-            💬 <span>Bình luận</span>
-          </button>
-          <button class="flex items-center space-x-1 hover:text-blue-600">
-            🔄 <span>Chia sẻ</span>
-          </button>
+  <div *ngFor="let post of posts" class="bg-white rounded-2xl shadow mb-4">
+    <!-- Header -->
+    <div class="flex items-center justify-between p-4">
+      <div class="flex items-center gap-3">
+        <img [src]="post.author?.profile?.avatarUrl || 'assets/default-avatar.png'" 
+            alt="avatar" 
+            class="w-10 h-10 rounded-full object-cover" />
+
+        <div>
+          <p class="font-semibold text-gray-900">
+            {{ post.author?.profile?.fullName }}
+          </p>
+          <p class="text-xs text-gray-500">
+            {{ post.createdAt | date:'short' }}
+          </p>
         </div>
       </div>
+      <!-- Privacy icon (tuỳ bạn có thể làm PUBLIC / FRIENDS) -->
+      <div class="text-gray-400">
+        <i class="fas fa-globe"></i>
+      </div>
     </div>
-  }
+
+    <!-- Nội dung -->
+    <div class="px-4 pb-2">
+      <p class="text-gray-800">{{ post.content }}</p>
+    </div>
+
+    <!-- Media -->
+    <div class="w-full px-4" *ngIf="post.mediaList && post.mediaList.length > 0">
+      <div *ngFor="let media of post.mediaList" class="mb-2">
+        <img *ngIf="media.mediaType === 'image'"
+            [src]="media.url"
+            class="w-full h-96 object-cover rounded-lg" />
+        <video *ngIf="media.mediaType === 'video'"
+              controls
+              class="w-full h-96 rounded-lg">
+          <source [src]="media.url" type="video/mp4" />
+        </video>
+      </div>
+    </div>
+
+    <!-- Action buttons -->
+    <div class="flex justify-around items-center text-gray-500 border-t mt-3 text-sm">
+      <button class="flex items-center gap-1 py-2 hover:text-blue-500">
+        <i class="fas fa-thumbs-up"></i> Like
+      </button>
+      <button class="flex items-center gap-1 py-2 hover:text-green-500">
+        <i class="fas fa-comment"></i> Comment
+      </button>
+      <button class="flex items-center gap-1 py-2 hover:text-purple-500">
+        <i class="fas fa-share"></i> Share
+      </button>
+    </div>
+  </div>
+
 </div>

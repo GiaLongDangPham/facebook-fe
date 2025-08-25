@@ -43,8 +43,8 @@
     <ng-container [ngSwitch]="activeTab">
       <div *ngSwitchCase="'posts'">
         <!-- reuse PostComponent hoặc viết tạm -->
-        <app-post></app-post>
-      </div>
+        <app-post [currentUser]="currentUser" ></app-post>
+      </div> 
       <div *ngSwitchCase="'about'">
         <app-profile-about [profile]="profile"></app-profile-about>
       </div>

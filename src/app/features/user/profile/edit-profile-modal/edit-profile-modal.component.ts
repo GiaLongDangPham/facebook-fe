@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { UserProfileResponse } from '../../../../core/interfaces/user-profile-response';
+import { UserProfileResponse } from '../../../../core/interfaces/user/user-profile-response';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { FileService } from '../../../../core/services/file.service';

@@ -1,14 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import { RegisterRequest } from '../interfaces/register-request';
-import { LoginRequest } from '../interfaces/login-request';
-import { AuthResponse } from '../interfaces/auth-response';
+import { RegisterRequest } from '../interfaces/auth/register-request';
+import { LoginRequest } from '../interfaces/auth/login-request';
+import { AuthResponse } from '../interfaces/auth/auth-response';
 import { Observable } from 'rxjs';
-import { LogoutRequest } from '../interfaces/logout-request';
-import { RefreshTokenRequest } from '../interfaces/refresh-token-request';
-import { ForgotPasswordRequest } from '../interfaces/forgot-password-request';
-import { ResetPasswordRequest } from '../interfaces/reset-password-request';
+import { LogoutRequest } from '../interfaces/auth/logout-request';
+import { RefreshTokenRequest } from '../interfaces/auth/refresh-token-request';
+import { ForgotPasswordRequest } from '../interfaces/auth/forgot-password-request';
+import { ResetPasswordRequest } from '../interfaces/auth/reset-password-request';
 
 @Injectable({
   providedIn: 'root'

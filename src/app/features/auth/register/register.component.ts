@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../core/services/auth.service';
-import { LogoutRequest } from '../../../core/interfaces/logout-request';
-import { RegisterRequest } from '../../../core/interfaces/register-request';
+import { LogoutRequest } from '../../../core/interfaces/auth/logout-request';
+import { RegisterRequest } from '../../../core/interfaces/auth/register-request';
 import { Router, RouterModule } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 

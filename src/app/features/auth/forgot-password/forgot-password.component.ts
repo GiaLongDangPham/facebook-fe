@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ForgotPasswordRequest } from '../../../core/interfaces/forgot-password-request';
+import { ForgotPasswordRequest } from '../../../core/interfaces/auth/forgot-password-request';
 import { RouterLink } from "@angular/router";
 import { AuthService } from '../../../core/services/auth.service';
 
