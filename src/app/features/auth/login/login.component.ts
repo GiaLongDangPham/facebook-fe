@@ -37,6 +37,7 @@ export class LoginComponent {
   ) { }
 
   login() {
+    debugger
     if (!this.user.email || !this.user.password) {
       this.toastr.error('Email and password are required', 'Login Error');
       return;
@@ -48,7 +49,7 @@ export class LoginComponent {
         this.tokenService.setToken(response.accessToken);
         this.userService.saveUserResponseToLocalStorage(response.userResponse);
 
-        this.toastr.success('Login successful', 'Success');
+        this.toastr.success('Đăng nhập thành công', 'Thành công');
         this.router.navigate(['/user']);
       },
       error: (error) => {

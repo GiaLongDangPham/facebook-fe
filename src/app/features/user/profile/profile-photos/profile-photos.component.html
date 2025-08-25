@@ -1,0 +1,57 @@
+<!-- Container ảnh -->
+<div class="grid grid-cols-4 gap-4 justify-start">
+  <div *ngFor="let photo of photos; index as i; trackBy: trackByFn" 
+       class="p-4 relative w-64 h-64 overflow-hidden rounded-lg shadow-md group">
+    <img
+      [src]="photo.url"
+      class="block w-full h-full object-cover transition-transform duration-300 cursor-pointer group-hover:scale-105"
+      (click)="openLightbox(i)"
+    />
+  </div>
+</div>
+
+<!-- Lightbox modal -->
+<div *ngIf="showLightbox" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50">
+  <!-- Close overlay -->
+  <div class="absolute inset-0" (click)="closeLightbox()"></div>
+
+  <!-- Photo container -->
+  <div class="relative w-[800px] h-[600px] mx-4 flex items-center justify-center">
+    <img [src]="photos[currentIndex].url" 
+         class="max-w-full max-h-full object-contain rounded shadow-lg" />
+
+    <!-- Close button -->
+    <button (click)="closeLightbox()"
+            class="absolute top-4 right-4 w-10 h-10 flex items-center justify-center bg-black/50 rounded-full text-white text-2xl font-bold hover:bg-black/70">
+      &times;
+    </button>
+
+    <!-- Menu button (3 chấm) -->
+    <div class="absolute top-4 right-16">
+      <button (click)="toggleMenu()"
+              class="w-10 h-10 flex items-center justify-center bg-black/50 rounded-full text-white text-2xl hover:bg-black/70">
+        <i class="fa-solid fa-ellipsis-vertical"></i>
+      </button>
+      <!-- Dropdown menu -->
+      <div *ngIf="showMenu"
+           class="absolute right-0 mt-2 w-32 bg-white rounded shadow-lg z-50">
+        <button (click)="deletePhoto(photos[currentIndex].id)"
+                class="w-full px-4 py-2 text-left text-red-600 hover:bg-gray-100">
+          Xóa ảnh
+        </button>
+      </div>
+    </div>
+
+    <!-- Prev button -->
+    <button (click)="prevPhoto()" 
+            class="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 flex items-center justify-center bg-black/50 rounded-full text-white text-3xl hover:bg-black/70">
+      &#10094;
+    </button>
+
+    <!-- Next button -->
+    <button (click)="nextPhoto()" 
+            class="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 flex items-center justify-center bg-black/50 rounded-full text-white text-3xl hover:bg-black/70">
+      &#10095;
+    </button>
+  </div>
+</div>

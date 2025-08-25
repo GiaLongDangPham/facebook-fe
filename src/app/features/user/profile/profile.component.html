@@ -1,0 +1,65 @@
+<div class="max-w-5xl mx-auto">
+  <!-- Cover -->
+  <div>
+    <img [src]="profile?.coverUrl || 'https://picsum.photos/1200/400?random=1'" 
+        class="w-full h-96 object-cover rounded-b-2xl shadow" />
+  </div>
+
+  <!-- Avatar + Info -->
+  <div class="flex items-end space-x-4 px-6 -mt-16">
+    <div class="relative">
+      <img [src]="profile?.avatarUrl || 'assets/default-avatar.jpg'" 
+          class="w-44 h-44 rounded-full border-4 border-white shadow-lg object-cover" />
+    </div>
+    <div class="flex-1">
+      <h1 class="text-2xl font-bold">{{ profile?.fullName }}</h1>
+      <p class="text-gray-600">{{ profile?.bio }}</p>
+    </div>
+    @if (!isOwner) {
+      <button class="bg-blue-600 text-white px-4 py-2 rounded-lg">Theo dõi</button>
+    }
+    @else {
+      <button (click)="openEditModal()" class="bg-gray-500 text-white px-4 py-2 rounded-lg">Chỉnh sửa trang cá nhân</button>
+    }
+  </div>
+
+  <!-- Tabs -->
+  <div class="border-b mt-6 px-6">
+    <nav class="flex space-x-6">
+      <button (click)="activeTab='posts'" 
+              [class.text-blue-600]="activeTab==='posts'" 
+              class="py-3 font-medium">Bài viết</button>
+      <button (click)="activeTab='about'" 
+              [class.text-blue-600]="activeTab==='about'" 
+              class="py-3 font-medium">Giới thiệu</button>
+      <button (click)="activeTab='photos'" 
+              [class.text-blue-600]="activeTab==='photos'" 
+              class="py-3 font-medium">Ảnh</button>
+    </nav>
+  </div>
+
+  <!-- Nội dung -->
+  <div class="px-6 py-4">
+    <ng-container [ngSwitch]="activeTab">
+      <div *ngSwitchCase="'posts'">
+        <!-- reuse PostComponent hoặc viết tạm -->
+        <app-post></app-post>
+      </div>
+      <div *ngSwitchCase="'about'">
+        <app-profile-about [profile]="profile"></app-profile-about>
+      </div>
+      <div *ngSwitchCase="'photos'">
+        <app-profile-photos [profile]="profile"></app-profile-photos>
+      </div>
+    </ng-container>
+  </div>
+</div>
+
+
+@if (showEditModal) {
+  <app-edit-profile-modal
+    [profile]="profile"
+    (close)="closeEditModal()"
+    (save)="saveProfile($event)">
+  </app-edit-profile-modal>
+}

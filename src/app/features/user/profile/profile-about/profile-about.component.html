@@ -1,0 +1,23 @@
+<div class="grid md:grid-cols-2 gap-6 text-gray-700 text-sm">
+  <!-- Cột 1: Thông tin cơ bản -->
+  <div class="space-y-3">
+    <h3 class="font-semibold text-gray-900 text-2xl">Thông tin cơ bản</h3>
+    <div><strong>Họ và tên:</strong> {{ profile?.fullName }}</div>
+    <div><strong>Username:</strong> {{ profile?.username }}</div>
+    <div><strong>Bio:</strong> {{ profile?.bio }}</div>
+    <div><strong>Giới tính:</strong> {{ profile?.gender === 'male' ? 'Nam' : 'Nữ' }}</div>
+    <div><strong>Ngày sinh:</strong> {{ profile?.dob | date:'dd/MM/yyyy' }}</div>
+  </div>
+
+  <!-- Cột 2: Liên hệ & Website -->
+  <div class="space-y-3">
+    <h3 class="font-semibold text-gray-900 text-2xl">Liên hệ & website</h3>
+    <div><strong>Địa chỉ:</strong> {{ profile?.location }}</div>
+    <div>
+      <strong>Website:</strong>
+      <a [href]="profile?.website" target="_blank" class="text-blue-500 underline">
+        {{ profile?.website }}
+      </a>
+    </div>
+  </div>
+</div>

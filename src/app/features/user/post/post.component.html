@@ -1,1 +1,48 @@
-<p>post works!</p>
+<div class="max-w-2xl mx-auto p-4 space-y-6">
+  <!-- Form tạo post -->
+  <div class="bg-white rounded-2xl shadow p-4">
+    <div class="flex items-center space-x-3">
+      <img src="https://i.pravatar.cc/100?img=5" class="w-10 h-10 rounded-full" />
+      <input 
+        type="text" 
+        placeholder="Bạn đang nghĩ gì thế?" 
+        class="flex-1 px-4 py-2 rounded-full border bg-gray-100 focus:outline-none"
+      />
+    </div>
+  </div>
+
+  <!-- Danh sách bài viết -->
+  @for (post of posts; track post.id) { 
+    <div class="bg-white rounded-2xl shadow">
+      <div class="p-4">
+        <!-- Header -->
+        <div class="flex items-center space-x-3 mb-3">
+          <img [src]="post.avatar" class="w-10 h-10 rounded-full" />
+          <div>
+            <p class="font-semibold">{{ post.author }}</p>
+            <p class="text-sm text-gray-500">{{ post.createdAt }}</p>
+          </div>
+        </div>
+  
+        <!-- Nội dung -->
+        <p class="mb-3">{{ post.content }}</p>
+  
+        <!-- Hình ảnh -->
+        <img *ngIf="post.image" [src]="post.image" class="w-full rounded-lg mb-3" />
+  
+        <!-- Actions -->
+        <div class="flex justify-between text-gray-600 text-sm border-t pt-2">
+          <button class="flex items-center space-x-1 hover:text-blue-600">
+            👍 <span>Thích</span>
+          </button>
+          <button class="flex items-center space-x-1 hover:text-blue-600">
+            💬 <span>Bình luận</span>
+          </button>
+          <button class="flex items-center space-x-1 hover:text-blue-600">
+            🔄 <span>Chia sẻ</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+</div>

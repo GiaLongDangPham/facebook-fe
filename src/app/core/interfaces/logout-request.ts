@@ -1,3 +1,3 @@
 export interface LogoutRequest {
-  refreshToken: string;
+  accessToken: string;
 }

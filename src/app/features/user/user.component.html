@@ -1,1 +1,39 @@
-<p>user works!</p>
+<div class="flex h-screen">
+  <!-- Sidebar -->
+  <aside class="w-64 bg-white border-r shadow-sm p-4 h-screen flex flex-col">
+    <h2 class="text-2xl text-blue-700 font-bold mb-6">Facebook</h2>
+
+    <div class="flex flex-col justify-between flex-1">
+      <!-- Menu -->
+      <nav class="flex flex-col space-y-2">
+        <a routerLink="./profile/{{ currentUser?.profile?.username }}"
+          routerLinkActive="bg-gradient-to-r from-green-500 to-green-300 text-white shadow-md font-semibold"
+          class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 hover:bg-gradient-to-r hover:from-green-400 hover:to-green-200 hover:shadow-lg">
+          <!-- Avatar -->
+          <img [src]="currentUser?.profile?.avatarUrl || 'assets/default-avatar.jpg'"
+              alt="Avatar"
+              class="w-8 h-8 rounded-full object-cover border border-gray-300" />
+          <span class="truncate max-w-[150px]">{{ displayName }}</span>
+        </a>
+        <a routerLink="./posts"
+          routerLinkActive="bg-gradient-to-r from-blue-600 to-blue-400 text-white shadow-md font-semibold"
+          class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 hover:bg-gradient-to-r hover:from-blue-500 hover:to-blue-300 hover:shadow-lg">
+          <span><i class="fa-solid fa-house"></i> Trang chủ</span>
+        </a>
+      </nav>
+
+      <!-- Logout -->
+      <div>
+        <a (click)="logout()"
+          class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 bg-gradient-to-r from-red-400 to-red-200 hover:shadow-lg">
+          <span>Đăng xuất</span>
+        </a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main content -->
+  <main class="flex-1 bg-gray-50 overflow-y-auto">
+    <router-outlet></router-outlet>
+  </main>
+</div>
