@@ -5,11 +5,15 @@ import { UserService } from '../../core/services/user.service';
 import { TokenService } from '../../core/services/token.service';
 import { AuthService } from '../../core/services/auth.service';
 import { LogoutRequest } from '../../core/interfaces/auth/logout-request';
+import { AvatarComponent } from './profile/avatar/avatar.component';
 
 @Component({
   selector: 'app-user',
   standalone: true,
-  imports: [RouterModule],
+  imports: [
+    RouterModule,
+    AvatarComponent
+  ],
   templateUrl: './user.component.html',
   styleUrl: './user.component.scss'
 })

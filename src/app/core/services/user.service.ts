@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { UserResponse } from '../interfaces/user/user-response';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +12,10 @@ export class UserService {
   constructor(
     private http: HttpClient
   ) { }
+
+  getUserByUsername(username: string): Observable<UserResponse> {
+    return this.http.get<UserResponse>(`${this.apiUrl}/${username}`);
+  }
 
   saveUserResponseToLocalStorage(userResponse?: UserResponse | null) {
     try {

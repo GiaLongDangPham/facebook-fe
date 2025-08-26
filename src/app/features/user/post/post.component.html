@@ -2,8 +2,14 @@
   <!-- Form tạo post -->
   <div class="bg-white rounded-2xl shadow p-4 space-y-4">
     <div class="flex gap-2">
-      <img [src]="currentUser?.profile?.avatarUrl || 'assets/default-avatar.jpg'" 
-          class="w-12 h-12 rounded-full border-2 border-white shadow-sm" />
+      <!-- avatar -->
+      <app-avatar 
+          [avatarUrl]="currentUserLoggedIn?.profile?.avatarUrl" 
+          [width]="48" 
+          [height]="48" 
+          [customClass]="'rounded-full border-2 border-white shadow-sm'"
+      ></app-avatar>
+
       <textarea 
         [(ngModel)]="content"
         placeholder="Bạn đang nghĩ gì thế?" 
@@ -33,29 +39,63 @@
     <!-- Header -->
     <div class="flex items-center justify-between p-4">
       <div class="flex items-center gap-3">
-        <img [src]="post.author?.profile?.avatarUrl || 'assets/default-avatar.png'" 
-            alt="avatar" 
-            class="w-10 h-10 rounded-full object-cover" />
+        <app-avatar 
+          [avatarUrl]="post.author.profile.avatarUrl" 
+          [width]="40" 
+          [height]="40" 
+          [customClass]="'rounded-full object-cover'"
+        ></app-avatar>
 
         <div>
-          <p class="font-semibold text-gray-900">
-            {{ post.author?.profile?.fullName }}
-          </p>
+          <a routerLink="/user/profile/{{ post.author.profile.username }}" class="hover:underline">
+            <p class="font-semibold text-gray-900">
+              {{ post.author.profile.fullName || post.author.profile.username }}
+            </p>
+          </a>
           <p class="text-xs text-gray-500">
-            {{ post.createdAt | date:'short' }}
+            {{ post.createdAt | timeAgo}}
           </p>
         </div>
       </div>
-      <!-- Privacy icon (tuỳ bạn có thể làm PUBLIC / FRIENDS) -->
-      <div class="text-gray-400">
-        <i class="fas fa-globe"></i>
+      <!-- Privacy chọn dropdown -->
+      <div class="relative inline-block text-left">
+        <button (click)="togglePrivacyMenu(post.id)" class="flex items-center gap-2 text-gray-500 hover:text-gray-700">
+          <i class="fas" [ngClass]="getPrivacyIcon(post.privacy)"></i>
+          <span class="text-sm">
+            {{ getPrivacyLabel(post.privacy) }}
+          </span>
+          <i *ngIf="post.author.id === currentUserLoggedIn?.id" class="fas fa-caret-down"></i>
+        </button>
+  
+        <!-- Dropdown menu -->
+         @if (post.author.id === currentUserLoggedIn?.id && isPrivacyMenuOpen(post.id)) {
+           <div
+               class="absolute mt-2 w-48 bg-white shadow-lg rounded-md border z-50">
+             <ul class="py-1 text-sm text-gray-700">
+               <li (click)="updatePrivacyPost(post.id, 'PUBLIC')" class="px-4 py-2 hover:bg-gray-100 flex items-center gap-2 cursor-pointer">
+                 <i class="fas fa-globe text-blue-500"></i> Công khai
+               </li>
+               <li (click)="updatePrivacyPost(post.id, 'FRIENDS')" class="px-4 py-2 hover:bg-gray-100 flex items-center gap-2 cursor-pointer">
+                 <i class="fas fa-user-friends text-green-500"></i> Bạn bè
+               </li>
+               <li (click)="updatePrivacyPost(post.id, 'ONLY_ME')" class="px-4 py-2 hover:bg-gray-100 flex items-center gap-2 cursor-pointer">
+                 <i class="fas fa-lock text-gray-700"></i> Chỉ mình tôi
+               </li>
+               <li (click)="updatePrivacyPost(post.id, 'CUSTOM')" class="px-4 py-2 hover:bg-gray-100 flex items-center gap-2 cursor-pointer">
+                 <i class="fas fa-cog text-purple-500"></i> Tuỳ chỉnh
+               </li>
+             </ul>
+           </div>
+         }
       </div>
     </div>
 
     <!-- Nội dung -->
-    <div class="px-4 pb-2">
-      <p class="text-gray-800">{{ post.content }}</p>
-    </div>
+     @if (post.content && post.content.trim() != '') {
+       <div class="px-4 pb-2">
+         <p class="text-gray-800">{{ post.content }}</p>
+       </div>
+     }
 
     <!-- Media -->
     <div class="w-full px-4" *ngIf="post.mediaList && post.mediaList.length > 0">

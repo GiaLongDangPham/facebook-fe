@@ -3,19 +3,24 @@ import { UserProfileResponse } from '../../../../core/interfaces/user/user-profi
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { FileService } from '../../../../core/services/file.service';
+import { AvatarComponent } from '../avatar/avatar.component';
+import { UserResponse } from '../../../../core/interfaces/user/user-response';
+import { forkJoin, tap } from 'rxjs';
 
 @Component({
   selector: 'app-edit-profile-modal',
   standalone: true,
   imports: [
     FormsModule,
-    CommonModule
+    CommonModule,
+    AvatarComponent
   ],
   templateUrl: './edit-profile-modal.component.html',
   styleUrl: './edit-profile-modal.component.scss'
 })
 export class EditProfileModalComponent {
 
+  @Input() currentUser: UserResponse | null = null;
   @Input() profile?: UserProfileResponse;
   @Output() save = new EventEmitter<UserProfileResponse>();
   @Output() close = new EventEmitter<void>();
@@ -48,7 +53,37 @@ export class EditProfileModalComponent {
   }
 
   onSave() {
-    this.save.emit(this.editedProfile);
+    const uploadTasks = [];
+
+    if (this.selectedAvatar) {
+      uploadTasks.push(
+        this.fileService.uploadFile(this.selectedAvatar).pipe(
+          tap(res => this.editedProfile.avatarUrl = res.url)
+        )
+      );
+    }
+
+    if (this.selectedCoverUrl) {
+      uploadTasks.push(
+        this.fileService.uploadFile(this.selectedCoverUrl).pipe(
+          tap(res => this.editedProfile.coverUrl = res.url)
+        )
+      );
+    }
+
+    if (uploadTasks.length > 0) {
+      forkJoin(uploadTasks).subscribe({
+        next: () => {
+          this.save.emit(this.editedProfile);
+        },
+        error: (err) => {
+          console.error('Error uploading files:', err);
+          alert('Upload ảnh thất bại');
+        }
+      });
+    } else {
+      this.save.emit(this.editedProfile);
+    }
   }
 
   onClose() {
@@ -65,24 +100,24 @@ export class EditProfileModalComponent {
     }
   }
 
-  uploadCoverUrl() {
-    debugger
-    if (!this.selectedCoverUrl) return;
+  // uploadCoverUrl() {
+  //   debugger
+  //   if (!this.selectedCoverUrl) return;
 
-    this.fileService.uploadFile(this.selectedCoverUrl).subscribe({
-      next: (res) => {
-        this.editedProfile = { ...this.profile }; // clone dữ liệu
-        this.editedProfile.coverUrl = res.url;
-        this.save.emit(this.editedProfile);
-        debugger
-      },
-      error: (err) => {
-        debugger
-        console.error('Error uploading cover:', err);
-        alert('Upload ảnh thất bại');
-      }
-    });
-  }
+  //   this.fileService.uploadFile(this.selectedCoverUrl).subscribe({
+  //     next: (res) => {
+  //       this.editedProfile = { ...this.profile }; // clone dữ liệu
+  //       this.editedProfile.coverUrl = res.url;
+  //       this.save.emit(this.editedProfile);
+  //       debugger
+  //     },
+  //     error: (err) => {
+  //       debugger
+  //       console.error('Error uploading cover:', err);
+  //       alert('Upload ảnh thất bại');
+  //     }
+  //   });
+  // }
 
   onAvatarSelected(event: Event) {
     debugger
@@ -94,22 +129,22 @@ export class EditProfileModalComponent {
     }
   }
 
-  uploadAvatar() {
-    debugger
-    if (!this.selectedAvatar) return;
+  // uploadAvatar() {
+  //   debugger
+  //   if (!this.selectedAvatar) return;
 
-    this.fileService.uploadFile(this.selectedAvatar).subscribe({
-      next: (res) => {
-        this.editedProfile = { ...this.profile }; // clone dữ liệu
-        this.editedProfile.avatarUrl = res.url;
-        this.save.emit(this.editedProfile);
-        debugger
-      },
-      error: (err) => {
-        debugger
-        console.error('Error uploading avatar:', err);
-        alert('Upload ảnh thất bại');
-      }
-    });
-  }
+  //   this.fileService.uploadFile(this.selectedAvatar).subscribe({
+  //     next: (res) => {
+  //       this.editedProfile = { ...this.profile }; // clone dữ liệu
+  //       this.editedProfile.avatarUrl = res.url;
+  //       this.save.emit(this.editedProfile);
+  //       debugger
+  //     },
+  //     error: (err) => {
+  //       debugger
+  //       console.error('Error uploading avatar:', err);
+  //       alert('Upload ảnh thất bại');
+  //     }
+  //   });
+  // }
 }

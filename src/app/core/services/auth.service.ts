@@ -9,6 +9,7 @@ import { LogoutRequest } from '../interfaces/auth/logout-request';
 import { RefreshTokenRequest } from '../interfaces/auth/refresh-token-request';
 import { ForgotPasswordRequest } from '../interfaces/auth/forgot-password-request';
 import { ResetPasswordRequest } from '../interfaces/auth/reset-password-request';
+import { TokenService } from './token.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,8 @@ export class AuthService {
   private apiUrl = environment.apiUrl + environment.apiVersion + '/auth';
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private tokenService: TokenService
   ) { }
 
   register(request: RegisterRequest): Observable<string> {
@@ -52,4 +54,7 @@ export class AuthService {
     return this.http.get<string>(`${this.apiUrl}/me`);
   }
 
+  isLoggedIn(): boolean {
+    return !!this.tokenService.getToken();
+  }
 }

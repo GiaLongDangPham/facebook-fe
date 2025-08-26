@@ -19,20 +19,25 @@ export class PostService {
     return this.http.post<PostResponse>(this.baseUrl, post);
   }
 
-    //   @GetMapping("/user/{userId}")
-    // public ResponseEntity<PageResponse<PostResponse>> getPostsByUser(
-    //         @PathVariable UUID userId,
-    //         @RequestParam(defaultValue = "0") int page,
-    //         @RequestParam(defaultValue = "10") int size
-    // ) {
-    //     return ResponseEntity.ok(postService.getPostsByUser(userId, page, size));
-    // }
-  getPostsByUser(userId: string, page: number, size: number): Observable<PageResponse<PostResponse>> {
-    return this.http.get<PageResponse<PostResponse>>(`${this.baseUrl}/user/${userId}`, {
+  getPostsByUser(currentUsername: string, page: number, size: number): Observable<PageResponse<PostResponse>> {
+    return this.http.get<PageResponse<PostResponse>>(`${this.baseUrl}/user/${currentUsername}`, {
       params: {
         page: page.toString(),
         size: size.toString()
       }
     });
+  }
+
+  getAllPosts(page: number, size: number): Observable<PageResponse<PostResponse>> {
+    return this.http.get<PageResponse<PostResponse>>(`${this.baseUrl}`, {
+      params: {
+        page: page.toString(),
+        size: size.toString()
+      }
+    });
+  }
+
+  updatePrivacyPost(id: string, privacy: string): Observable<PostResponse> {
+    return this.http.put<PostResponse>(`${this.baseUrl}/${id}`, { privacy });
   }
 }

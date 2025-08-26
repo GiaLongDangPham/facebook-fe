@@ -20,23 +20,26 @@
             <input type="file" accept="image/*" hidden (change)="onCoverUrlSelected($event)">
           </label>
         </div>
-        <button
+        <!-- <button
           *ngIf="selectedCoverUrl"
           class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
           (click)="uploadCoverUrl()"
         >
           Lưu ảnh bìa
-        </button>
+        </button> -->
       </div>
 
       <!-- Avatar -->
       <div class="relative flex flex-col items-start -mt-16 mb-6">
         <label class="absolute -top-6 left-0 text-sm font-medium z-10">Ảnh đại diện</label>
         <div class="flex justify-center items-center w-full relative">
-          <img 
-            [src]="previewUrl || editedProfile.avatarUrl || 'assets/default-avatar.jpg'" 
-            class="w-44 h-44 rounded-full border-4 border-white shadow-lg object-cover"
-          />
+          <app-avatar 
+              [avatarUrl]="currentUser?.profile?.avatarUrl" 
+              [width]="176" 
+              [height]="176" 
+              [previewUrl]="previewUrl"
+              [customClass]="'rounded-full border-4 border-white shadow-lg object-cover'"
+          ></app-avatar>
           <label 
             class="absolute bottom-0 right-0 bg-black bg-opacity-50 text-white px-3 py-1 rounded-lg text-sm cursor-pointer hover:bg-opacity-70 z-10"
           >
@@ -44,13 +47,13 @@
             <input type="file" accept="image/*" hidden (change)="onAvatarSelected($event)">
           </label>
         </div>
-        <button
+        <!-- <button
           *ngIf="selectedAvatar"
           class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
           (click)="uploadAvatar()"
         >
           Lưu ảnh đại diện
-        </button>
+        </button> -->
       </div>
 
       <div>

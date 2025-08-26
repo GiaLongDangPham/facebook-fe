@@ -10,6 +10,7 @@ import { EditProfileModalComponent } from './edit-profile-modal/edit-profile-mod
 import { ToastrService } from 'ngx-toastr';
 import { ProfileAboutComponent } from './profile-about/profile-about.component';
 import { ProfilePhotosComponent } from './profile-photos/profile-photos.component';
+import { AvatarComponent } from './avatar/avatar.component';
 
 @Component({
   selector: 'app-profile',
@@ -19,7 +20,8 @@ import { ProfilePhotosComponent } from './profile-photos/profile-photos.componen
     CommonModule,
     EditProfileModalComponent,
     ProfileAboutComponent,
-    ProfilePhotosComponent
+    ProfilePhotosComponent,
+    AvatarComponent
   ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss'
@@ -30,8 +32,11 @@ export class ProfileComponent {
   isOwner = false;
   activeTab: 'posts' | 'about' | 'photos' = 'posts';
   currentUser: UserResponse | null = null;
+  viewedUser: UserResponse | null = null; // User mà mình vô trang cá nhân
 
   showEditModal = false;
+
+  currentUsername: string | null = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -45,15 +50,17 @@ export class ProfileComponent {
 
     // Subscribe paramMap để load profile mỗi khi id thay đổi
     this.route.paramMap.subscribe(params => {
-      const username = params.get('username');
-      if (username === this.currentUser?.profile?.username) {
+      this.currentUsername = params.get('username');
+      this.loadViewedUser();
+
+      if (this.currentUsername === this.currentUser?.profile?.username) {
         this.isOwner = true;
       } else {
         this.isOwner = false;
       }
 
-      if (username) {
-        this.profileService.getProfile(username).subscribe({
+      if (this.currentUsername) {
+        this.profileService.getProfile(this.currentUsername).subscribe({
           next: (profile) => {
             this.profile = profile;
           },
@@ -61,6 +68,19 @@ export class ProfileComponent {
             console.error('Error fetching profile:', error);
           }
         });
+      }
+    });
+  }
+
+  
+  loadViewedUser() {
+    if (!this.currentUsername) return;
+    this.userService.getUserByUsername(this.currentUsername).subscribe({
+      next: (res: UserResponse) => {
+        this.viewedUser = res;
+      },
+      error: (err) => {
+        console.error('Error loading user:', err);
       }
     });
   }
