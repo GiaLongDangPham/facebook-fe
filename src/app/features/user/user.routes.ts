@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { PostComponent } from './post/post.component';
 import { ProfileComponent } from './profile/profile.component';
-import { PROFILE_ROUTES } from './profile/profile.routes';
+import { MessagesComponent } from './messages/messages.component';
 
 export const USER_ROUTES: Routes = [
   {
@@ -11,5 +11,9 @@ export const USER_ROUTES: Routes = [
   {
     path: 'profile/:username',
     component: ProfileComponent,
+  },
+  {
+    path: 'messages',
+    component: MessagesComponent
   }
 ];

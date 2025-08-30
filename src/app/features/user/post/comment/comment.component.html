@@ -1,0 +1,25 @@
+<!-- comment input -->
+<div class="flex relative items-center gap-2 mb-3">
+  @if (!commentLocked) {
+    <app-avatar
+      [avatarUrl]="currentUser?.profile?.avatarUrl"
+      [width]="32"
+      [height]="32"
+      [customClass]="'rounded-full'"
+    ></app-avatar>
+    <input type="text"
+           [(ngModel)]="newComment"
+           (keyup.enter)="addComment()"
+           placeholder="Nhập bình luận..."
+           class="flex-1 pl-3 pr-9 py-2 border rounded-full text-sm focus:outline-none focus:ring focus:ring-blue-300" />
+    <i (click)="addComment()" class="fa-solid fa-paper-plane absolute right-3"></i>
+  }
+</div>
+
+<!-- comments list -->
+<div *ngFor="let c of comments" class="mb-2">
+  <app-comment-detail 
+    [comment]="c"
+    [currentUser]="currentUser"
+  ></app-comment-detail>
+</div>

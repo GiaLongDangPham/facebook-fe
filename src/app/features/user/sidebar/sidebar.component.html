@@ -1,0 +1,16 @@
+<aside class="w-64 fixed top-14 left-0 bottom-0 bg-white border-r shadow-sm p-4 h-screen flex flex-col overflow-y-auto">
+  <div class="flex flex-col justify-between flex-1">
+    <!-- Menu -->
+    <nav class="flex flex-col space-y-2">
+      <a routerLink="./profile/{{ currentUser?.profile?.username }}"
+        routerLinkActive="bg-gradient-to-r from-green-500 to-green-300 text-white shadow-md font-semibold"
+        class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 hover:bg-gradient-to-r hover:from-green-400 hover:to-green-200 hover:shadow-lg">
+        <!-- Avatar -->
+        <app-avatar [avatarUrl]="currentUser?.profile?.avatarUrl" [width]="32" [height]="32"
+          [customClass]="'rounded-full object-cover border border-gray-300'"></app-avatar>
+
+        <span class="truncate max-w-[150px]">{{ displayName }}</span>
+      </a>
+    </nav>
+  </div>
+</aside>

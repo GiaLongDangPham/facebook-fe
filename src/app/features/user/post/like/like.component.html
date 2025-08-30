@@ -1,0 +1,4 @@
+<button (click)="toggleLike()" class="flex items-center gap-1 py-2">
+  <i class="fa" [ngClass]="isLiked ? 'fas fa-thumbs-up text-blue-500' : 'fa-regular fa-thumbs-up'"></i>
+  <span>{{ totalLikes }} Thích</span>
+</button>

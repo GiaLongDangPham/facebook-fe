@@ -18,20 +18,19 @@ export class ForgotPasswordComponent {
   user: ForgotPasswordRequest = {
     email: ''
   };
+  isSearching = false;
 
   constructor(
     private authService: AuthService
   ) { }
 
   search() {
-    debugger
+    this.isSearching = true;
     this.authService.forgotPassword(this.user).subscribe({
       next: (res) => {
-        debugger
         console.log('Success:', res);
       },
       error: (err) => {
-        debugger
         console.error('Error:', err);
       }
     });

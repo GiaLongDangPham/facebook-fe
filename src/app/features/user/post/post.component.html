@@ -1,4 +1,11 @@
-<div class="max-w-2xl mx-auto p-4 space-y-6">
+<div 
+  class="max-w-2xl mx-auto p-4 space-y-6"
+  infinite-scroll
+  [infiniteScrollDistance]="2"
+  [scrollWindow]="true"
+  [infiniteScrollThrottle]="300"
+  (scrolled)="loadMore()"
+>
   <!-- Form tạo post -->
   <div class="bg-white rounded-2xl shadow p-4 space-y-4">
     <div class="flex gap-2">
@@ -36,93 +43,19 @@
 
   <!-- Danh sách bài viết -->
   <div *ngFor="let post of posts" class="bg-white rounded-2xl shadow mb-4">
-    <!-- Header -->
-    <div class="flex items-center justify-between p-4">
-      <div class="flex items-center gap-3">
-        <app-avatar 
-          [avatarUrl]="post.author.profile.avatarUrl" 
-          [width]="40" 
-          [height]="40" 
-          [customClass]="'rounded-full object-cover'"
-        ></app-avatar>
-
-        <div>
-          <a routerLink="/user/profile/{{ post.author.profile.username }}" class="hover:underline">
-            <p class="font-semibold text-gray-900">
-              {{ post.author.profile.fullName || post.author.profile.username }}
-            </p>
-          </a>
-          <p class="text-xs text-gray-500">
-            {{ post.createdAt | timeAgo}}
-          </p>
-        </div>
-      </div>
-      <!-- Privacy chọn dropdown -->
-      <div class="relative inline-block text-left">
-        <button (click)="togglePrivacyMenu(post.id)" class="flex items-center gap-2 text-gray-500 hover:text-gray-700">
-          <i class="fas" [ngClass]="getPrivacyIcon(post.privacy)"></i>
-          <span class="text-sm">
-            {{ getPrivacyLabel(post.privacy) }}
-          </span>
-          <i *ngIf="post.author.id === currentUserLoggedIn?.id" class="fas fa-caret-down"></i>
-        </button>
-  
-        <!-- Dropdown menu -->
-         @if (post.author.id === currentUserLoggedIn?.id && isPrivacyMenuOpen(post.id)) {
-           <div
-               class="absolute mt-2 w-48 bg-white shadow-lg rounded-md border z-50">
-             <ul class="py-1 text-sm text-gray-700">
-               <li (click)="updatePrivacyPost(post.id, 'PUBLIC')" class="px-4 py-2 hover:bg-gray-100 flex items-center gap-2 cursor-pointer">
-                 <i class="fas fa-globe text-blue-500"></i> Công khai
-               </li>
-               <li (click)="updatePrivacyPost(post.id, 'FRIENDS')" class="px-4 py-2 hover:bg-gray-100 flex items-center gap-2 cursor-pointer">
-                 <i class="fas fa-user-friends text-green-500"></i> Bạn bè
-               </li>
-               <li (click)="updatePrivacyPost(post.id, 'ONLY_ME')" class="px-4 py-2 hover:bg-gray-100 flex items-center gap-2 cursor-pointer">
-                 <i class="fas fa-lock text-gray-700"></i> Chỉ mình tôi
-               </li>
-               <li (click)="updatePrivacyPost(post.id, 'CUSTOM')" class="px-4 py-2 hover:bg-gray-100 flex items-center gap-2 cursor-pointer">
-                 <i class="fas fa-cog text-purple-500"></i> Tuỳ chỉnh
-               </li>
-             </ul>
-           </div>
-         }
-      </div>
-    </div>
-
-    <!-- Nội dung -->
-     @if (post.content && post.content.trim() != '') {
-       <div class="px-4 pb-2">
-         <p class="text-gray-800">{{ post.content }}</p>
-       </div>
-     }
-
-    <!-- Media -->
-    <div class="w-full px-4" *ngIf="post.mediaList && post.mediaList.length > 0">
-      <div *ngFor="let media of post.mediaList" class="mb-2">
-        <img *ngIf="media.mediaType === 'image'"
-            [src]="media.url"
-            class="w-full h-96 object-cover rounded-lg" />
-        <video *ngIf="media.mediaType === 'video'"
-              controls
-              class="w-full h-96 rounded-lg">
-          <source [src]="media.url" type="video/mp4" />
-        </video>
-      </div>
-    </div>
-
-    <!-- Action buttons -->
-    <div class="flex justify-around items-center text-gray-500 border-t mt-3 text-sm">
-      <button class="flex items-center gap-1 py-2 hover:text-blue-500">
-        <i class="fas fa-thumbs-up"></i> Like
-      </button>
-      <button class="flex items-center gap-1 py-2 hover:text-green-500">
-        <i class="fas fa-comment"></i> Comment
-      </button>
-      <button class="flex items-center gap-1 py-2 hover:text-purple-500">
-        <i class="fas fa-share"></i> Share
-      </button>
-    </div>
+    <app-post-detail 
+      [post]="post"
+      [currentUserLoggedIn]="currentUserLoggedIn"
+      (updatedPost)="updatePrivacyPost($event)"
+      (deletedPost)="deletePost($event)"
+    ></app-post-detail>
   </div>
+
+  <!-- loading indicator -->
+  <div *ngIf="isLoading" class="text-center py-4 text-gray-500">
+    Đang tải thêm...
+  </div>
+
+  <p *ngIf="posts.length === 0" class="text-gray-500 text-center text-lg">Chưa có bài viết nào</p>
 
 </div>

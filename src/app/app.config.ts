@@ -6,6 +6,7 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { authInterceptor } from './core/interceptors/auth.interceptor';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
+// import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -13,7 +14,8 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withInterceptors([authInterceptor])),
     importProvidersFrom(
       BrowserAnimationsModule,
-      ToastrModule.forRoot()
+      ToastrModule.forRoot(),
+      // InfiniteScrollModule
     )
   ]
 };

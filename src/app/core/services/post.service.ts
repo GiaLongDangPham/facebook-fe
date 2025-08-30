@@ -38,6 +38,14 @@ export class PostService {
   }
 
   updatePrivacyPost(id: string, privacy: string): Observable<PostResponse> {
-    return this.http.put<PostResponse>(`${this.baseUrl}/${id}`, { privacy });
+    return this.http.put<PostResponse>(`${this.baseUrl}/privacy/${id}`, { privacy });
+  }
+
+  updateCommentBlockPost(id: string, commentLocked: boolean): Observable<PostResponse> {
+    return this.http.put<PostResponse>(`${this.baseUrl}/comment/${id}`, { commentLocked });
+  }
+
+  deletePost(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/${id}`);
   }
 }

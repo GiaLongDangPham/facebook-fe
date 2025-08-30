@@ -13,8 +13,8 @@ import { forkJoin } from 'rxjs';
 import { AvatarComponent } from '../profile/avatar/avatar.component';
 import { UserService } from '../../../core/services/user.service';
 import { RouterModule } from '@angular/router';
-import { TimeAgoPipe } from '../../../core/pipes/time-ago.pipe';
-
+import { PostDetailComponent } from './post-detail/post-detail.component';
+import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 @Component({
   selector: 'app-post',
   standalone: true,
@@ -23,7 +23,8 @@ import { TimeAgoPipe } from '../../../core/pipes/time-ago.pipe';
     FormsModule,
     AvatarComponent,
     RouterModule,
-    TimeAgoPipe
+    PostDetailComponent,
+    InfiniteScrollDirective
   ],
   templateUrl: './post.component.html',
   styleUrl: './post.component.scss'
@@ -36,49 +37,65 @@ export class PostComponent {
   previewUrls: string[] = [];   // hiển thị preview cho user
   content: string = '';
   isPosting: boolean = false;
-  privacyMenuPostId: string | null = null;
+
+  // Infinite Scroll
+  page = 0;
+  size = 2;
+  totalPages = 0;
+  isLoading = false;
 
   constructor(
     private fileService: FileService,
     private postService: PostService,
-    private userService: UserService
+    private userService: UserService,
   ) { }
 
   ngOnInit() {
-    this.loadPosts();
+    this.resetAndLoad();
+    if (!this.currentUserLoggedIn) {
+      this.currentUserLoggedIn = this.userService.getUserResponseFromLocalStorage();
+    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['currentUsername'] && !changes['currentUsername'].firstChange) {
-      this.loadPosts(); // reload posts khi username thay đổi
+      this.resetAndLoad(); // reload posts khi username thay đổi
     }
   }
 
+  resetAndLoad() {
+    this.page = 0;
+    this.posts = [];
+    this.loadPosts();
+  }
+
   loadPosts() {
-    if (!this.currentUsername) {
-      this.currentUserLoggedIn = this.userService.getUserResponseFromLocalStorage();
-      this.postService.getAllPosts(0, 10).subscribe({
-        next: (res: PageResponse<PostResponse>) => {
-          debugger
-          this.posts = res.content || [];
-        },
-        error: (err) => {
-          debugger
-          console.error('Error loading posts:', err);
-        }
-      });
-    }
-    else {
-      this.postService.getPostsByUser(this.currentUsername, 0, 10).subscribe({
-        next: (res: PageResponse<PostResponse>) => {
-          debugger
-          this.posts = res.content || [];
-        },
-        error: (err) => {
-          debugger
-          console.error('Error loading posts:', err);
-        }
-      });
+    if (this.isLoading) return;
+    this.isLoading = true;
+
+    const request$ = this.currentUsername
+      ? this.postService.getPostsByUser(this.currentUsername, this.page, this.size)
+      : this.postService.getAllPosts(this.page, this.size);
+
+    request$.subscribe({
+      next: (res: PageResponse<PostResponse>) => {
+        this.posts = [...this.posts, ...(res.content || [])];
+        this.totalPages = res.totalPages;
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error('Error loading posts:', err);
+        this.isLoading = false;
+      }
+    });
+  }
+
+  loadMore() {
+    debugger
+    console.log('Scrolled!! page:', this.page, 'total:', this.totalPages);
+    if (this.page + 1 < this.totalPages) {
+      this.page++;
+      this.loadPosts();
     }
   }
 
@@ -173,45 +190,18 @@ export class PostComponent {
     this.previewUrls = [];
   }
 
-  updatePrivacyPost(id: string, privacy: string) {
-    this.postService.updatePrivacyPost(id, privacy).subscribe({
-      next: (res: PostResponse) => {
-        const index = this.posts.findIndex(post => post.id === id);
-        if (index !== -1) {
-          this.posts[index] = res;
-        }
-      },
-      error: (err) => {
-        console.error('Error updating post privacy:', err);
-      }
-    });
-  }
-
-  togglePrivacyMenu(postId: string) {
-    this.privacyMenuPostId = this.privacyMenuPostId === postId ? null : postId;
-  }
-
-  isPrivacyMenuOpen(postId: string): boolean {
-    return this.privacyMenuPostId === postId;
-  }
-
-  getPrivacyLabel(privacy: string | undefined): string {
-    switch (privacy) {
-      case 'PUBLIC': return 'Công khai';
-      case 'FRIENDS': return 'Bạn bè';
-      case 'ONLY_ME': return 'Chỉ mình tôi';
-      case 'CUSTOM': return 'Tuỳ chỉnh';
-      default: return '';
+  updatePrivacyPost(post: PostResponse) {
+    const index = this.posts.findIndex(p => p.id === post.id);
+    if (index !== -1) {
+      this.posts[index] = post;
     }
   }
 
-  getPrivacyIcon(privacy: string | undefined): string {
-    switch (privacy?.toUpperCase()) {
-      case 'PUBLIC': return 'fa-globe';
-      case 'FRIENDS': return 'fa-user-friends';
-      case 'ONLY_ME': return 'fa-lock';
-      case 'CUSTOM': return 'fa-cog';
-      default: return '';
+  deletePost(postId: string) {
+    const index = this.posts.findIndex(p => p.id === postId);
+    if (index !== -1) {
+      this.posts.splice(index, 1);
     }
   }
+
 }

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, SimpleChanges } from '@angular/core';
 import { UserProfileResponse } from '../../../../core/interfaces/user/user-profile-response';
 import { UserPhotoService } from '../../../../core/services/user-photo.service';
 import { CommonModule } from '@angular/common';
@@ -28,6 +28,16 @@ export class ProfilePhotosComponent {
   ) { }
 
   ngOnInit(): void {
+    this.getUserPhotos();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['profile'] && !changes['profile'].firstChange) {
+      this.getUserPhotos();
+    }
+  }
+
+  getUserPhotos() {
     if (this.profile && this.profile.userId) {
       this.userPhotoService.getUserPhotos(this.profile.userId).subscribe({
         next: (photos) => {

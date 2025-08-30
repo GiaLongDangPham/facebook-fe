@@ -1,0 +1,28 @@
+<div class="pt-14">
+  <header class="w-full h-14 fixed top-0 right-0 left-0 bg-white shadow-sm border-b px-6 py-3 flex items-center justify-between">
+    <!-- Logo -->
+    <h1 class="text-xl font-bold text-blue-600">Facebook</h1>
+
+    <!-- Menu -->
+    <nav class="flex items-center text-2xl gap-6">
+      <a 
+        routerLink="/user/posts" 
+        routerLinkActive #rlaPosts="routerLinkActive"
+        class="py-3 px-10"
+        [ngClass]="rlaPosts.isActive ? 'text-blue-600 border-b-4 border-blue-600 font-semibold' : 'text-gray-400'">
+        <i class="fa-solid fa-house"></i>
+      </a>
+      <a 
+        routerLink="/user/messages" 
+        routerLinkActive #rlaMsg="routerLinkActive"
+        class="py-3 px-10"
+        [ngClass]="rlaMsg.isActive ? 'text-blue-600 border-b-4 border-blue-600 font-semibold' : 'text-gray-400'">
+        <i class="fa-regular fa-message"></i>
+      </a>
+    </nav>
+    <button (click)="logout()" class="text-red-500 hover:text-red-700">
+      <i class="fa-solid fa-right-from-bracket"></i> Đăng xuất
+    </button>
+  </header>
+
+</div>

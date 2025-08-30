@@ -1,44 +1,113 @@
 <div class="max-w-5xl mx-auto">
   <!-- Cover -->
   <div>
-    <img [src]="profile?.coverUrl || 'https://picsum.photos/1200/400?random=1'" 
-        class="w-full h-96 object-cover rounded-b-2xl shadow" />
+    <img [src]="profile?.coverUrl || 'https://picsum.photos/1200/400?random=1'"
+      class="w-full h-96 object-cover rounded-b-2xl shadow" />
   </div>
 
   <!-- Avatar + Info -->
   <div class="flex items-end space-x-4 px-6 -mt-16">
     <div class="relative">
-      <app-avatar 
-          [avatarUrl]="viewedUser?.profile?.avatarUrl" 
-          [width]="176" 
-          [height]="176" 
-          [customClass]="'rounded-full border-4 border-white shadow-lg object-cover'"
-      ></app-avatar>
+      <app-avatar [avatarUrl]="viewedUser?.profile?.avatarUrl" [width]="176" [height]="176"
+        [customClass]="'rounded-full border-4 border-white shadow-lg object-cover'"></app-avatar>
     </div>
     <div class="flex-1">
-      <h1 class="text-2xl font-bold">{{ profile?.fullName }}</h1>
+      <h1 class="text-2xl font-bold">{{ profile?.fullName || profile?.username }}</h1>
       <p class="text-gray-600">{{ profile?.bio }}</p>
     </div>
     @if (!isOwner) {
-      <button class="bg-blue-600 text-white px-4 py-2 rounded-lg">Theo dõi</button>
+      <div class="flex gap-2">
+        @switch (friendStatus) { 
+          @case ("none") { 
+            <!-- Trường hợp chưa là bạn bè -->
+            <button 
+              (click)="sendFriendRequest()"
+              class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
+              Kết bạn
+            </button> 
+          } 
+          @case ("pending") { 
+            <!-- Trường hợp mình đã gửi lời mời -->
+            <button 
+              (click)="cancelFriendRequest()"
+              class="bg-blue-600 text-white px-4 py-2 rounded-lg cursor-pointer">
+              Đã gửi lời mời
+            </button> 
+          } 
+          @case ("waiting") { 
+            <!-- Trường hợp người kia gửi lời mời cho mình -->
+            <button 
+              (click)="acceptFriendRequest()"
+              class="bg-blue-600 text-white px-4 py-2 rounded-lg cursor-pointer">
+              Xác nhận 
+            </button> 
+
+            <button 
+              (click)="removeFriendRequest()" 
+              class="bg-gray-600 text-white px-4 py-2 rounded-lg cursor-pointer">
+              Xóa
+            </button> 
+          } 
+          @case ("accepted") { 
+            <!-- Trường hợp đã là bạn bè -->
+            <div class="relative inline-block">
+              <!-- Nút Bạn bè -->
+              <button 
+                (click)="toggleDropdown()" 
+                class="bg-blue-600 text-white px-4 py-2 rounded-lg cursor-pointer flex items-center gap-1">
+                Bạn bè
+                <i class="fa-solid fa-angle-down"></i>
+              </button>
+
+              <!-- Dropdown -->
+              @if (isDropdownOpen) {
+                <div class="absolute left-0 mt-2 w-48 bg-white border rounded-lg shadow-lg z-10">
+                  <ul class="py-1 text-sm text-gray-700">
+                    <li>
+                      <button 
+                        (click)="addToFavorites()" 
+                        class="w-full text-left px-4 py-2 hover:bg-gray-100">
+                        Thêm vào yêu thích
+                      </button>
+                    </li>
+                    <li>
+                      <button 
+                        (click)="unfriend()" 
+                        class="w-full text-left px-4 py-2 hover:bg-gray-100 text-red-600">
+                        Xóa bạn
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              }
+            </div>
+
+            <button 
+              class="bg-gray-200 px-4 py-2 rounded-lg hover:bg-gray-300 transition">
+              Theo dõi
+            </button> 
+          } 
+        }
+
+      </div>
     }
     @else {
-      <button (click)="openEditModal()" class="bg-gray-500 text-white px-4 py-2 rounded-lg">Chỉnh sửa trang cá nhân</button>
+    <button (click)="openEditModal()" class="bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded-lg">
+      Chỉnh sửa trang cá nhân</button>
     }
   </div>
 
   <!-- Tabs -->
   <div class="border-b mt-6 px-6">
     <nav class="flex space-x-6">
-      <button (click)="activeTab='posts'" 
-              [class.text-blue-600]="activeTab==='posts'" 
-              class="py-3 font-medium">Bài viết</button>
-      <button (click)="activeTab='about'" 
-              [class.text-blue-600]="activeTab==='about'" 
-              class="py-3 font-medium">Giới thiệu</button>
-      <button (click)="activeTab='photos'" 
-              [class.text-blue-600]="activeTab==='photos'" 
-              class="py-3 font-medium">Ảnh</button>
+      <button (click)="activeTab='posts'" [class.text-blue-600]="activeTab==='posts'" class="py-3 font-medium">Bài
+        viết</button>
+      <button (click)="activeTab='about'" [class.text-blue-600]="activeTab==='about'" class="py-3 font-medium">Giới
+        thiệu</button>
+      <button (click)="activeTab='photos'" [class.text-blue-600]="activeTab==='photos'"
+        class="py-3 font-medium">Ảnh</button>
+      <button (click)="activeTab='friends'" [class.text-blue-600]="activeTab==='friends'" class="py-3 font-medium">Bạn
+        bè</button>
     </nav>
   </div>
 
@@ -46,14 +115,16 @@
   <div class="px-6 py-4">
     <ng-container [ngSwitch]="activeTab">
       <div *ngSwitchCase="'posts'">
-        <!-- reuse PostComponent hoặc viết tạm -->
         <app-post [currentUserLoggedIn]="currentUser" [currentUsername]="currentUsername"></app-post>
-      </div> 
+      </div>
       <div *ngSwitchCase="'about'">
         <app-profile-about [profile]="profile"></app-profile-about>
       </div>
       <div *ngSwitchCase="'photos'">
         <app-profile-photos [profile]="profile"></app-profile-photos>
+      </div>
+      <div *ngSwitchCase="'friends'">
+        <app-friends [currentUserLoggedIn]="currentUser" [currentUsername]="currentUsername"></app-friends>
       </div>
     </ng-container>
   </div>
@@ -61,10 +132,7 @@
 
 
 @if (showEditModal) {
-  <app-edit-profile-modal
-    [currentUser]="currentUser"
-    [profile]="profile"
-    (close)="closeEditModal()"
-    (save)="saveProfile($event)">
-  </app-edit-profile-modal>
+<app-edit-profile-modal [currentUser]="currentUser" [profile]="profile" (close)="closeEditModal()"
+  (save)="saveProfile($event)">
+</app-edit-profile-modal>
 }
