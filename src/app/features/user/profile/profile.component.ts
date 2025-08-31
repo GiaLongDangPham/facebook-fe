@@ -39,7 +39,6 @@ export class ProfileComponent {
   currentUsername: string | null = null; // Username của người mình vô trang cá nhân
   viewedUser: UserResponse | null = null; // User mà mình vô trang cá nhân
   showEditModal = false;
-  friends: Friend[] = [];
   friendStatus: 'accepted' | 'pending' | 'waiting' | 'none' = 'none';
   isDropdownOpen = false;
 
@@ -57,7 +56,7 @@ export class ProfileComponent {
     this.route.paramMap.subscribe(params => {
       this.currentUsername = params.get('username');
       this.loadViewedUser();
-      this.getListFriends();
+      this.getFriendStatus();
       this.getProfile();
       this.isOwner = (this.currentUsername === this.currentUser?.profile?.username) ? true : false;
     });
@@ -89,20 +88,15 @@ export class ProfileComponent {
     }
   }
 
-  getListFriends() {
-    if (!this.currentUser || !this.currentUser.profile.username) return;
-    this.userFriendService.getListFriends(this.currentUser.profile.username, 0, 10).subscribe({
-      next: (response) => {
-        if (response && response.content) {
-          this.friends = response.content;
-          debugger
-          // Tìm trong danh sách bạn bè xem có phải là viewedUser không
-          const relation = this.friends.find(friend => friend.otherUser?.id === this.viewedUser?.id);
-          this.friendStatus = relation ? relation.status : 'none';
-        }
+  getFriendStatus() {
+    debugger
+    if (this.currentUsername === this.currentUser?.profile.username || !this.currentUsername) return;
+    this.userFriendService.getFriendStatus(this.currentUsername).subscribe({
+      next: (res) => {
+        this.friendStatus = res.status;
       },
       error: (error) => {
-        console.error('Error loading friends:', error);
+        console.error('Error fetching friend status:', error);
       }
     });
   }

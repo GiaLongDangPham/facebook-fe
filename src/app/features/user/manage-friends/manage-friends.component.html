@@ -1,0 +1,26 @@
+<div class="flex min-h-screen bg-gray-100">
+  <!-- Sidebar trái -->
+  <aside class="w-[360px] fixed top-14 left-0 bottom-0 bg-white border-r border-gray-200 p-4">
+    <nav class="flex flex-col gap-2">
+      <a 
+        routerLink="requests" 
+        routerLinkActive="bg-blue-100 text-blue-600 font-semibold"
+        class="px-4 py-2 rounded-lg hover:bg-gray-100"
+      >
+        <i class="fa fa-user-plus"></i> Lời mời kết bạn
+      </a>
+      <a 
+        routerLink="suggests" 
+        routerLinkActive="bg-blue-100 text-blue-600 font-semibold"
+        class="px-4 py-2 rounded-lg hover:bg-gray-100"
+      >
+        <i class="fa-solid fa-users"></i> Gợi ý kết bạn
+      </a>
+    </nav>
+  </aside>
+
+  <!-- Nội dung chính -->
+  <main class="ml-[360px] flex-1 p-6 overflow-y-auto">
+    <router-outlet></router-outlet>
+  </main>
+</div>

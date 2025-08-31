@@ -50,7 +50,7 @@ export class LoginComponent {
         this.userService.saveUserResponseToLocalStorage(response.userResponse);
 
         this.toastr.success('Đăng nhập thành công', 'Thành công');
-        this.router.navigate(['/user']);
+        this.router.navigate(['/user/posts']);
       },
       error: (error) => {
         debugger

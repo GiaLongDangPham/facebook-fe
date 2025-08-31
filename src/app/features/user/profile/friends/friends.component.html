@@ -2,8 +2,8 @@
   <!-- Tabs trên đầu -->
   <div class="flex items-center justify-between mb-4">
     <!-- header -->
-    <span class="text-black font-bold text-2xl">Bạn bè</span>
-    
+    <span class="text-black font-bold text-2xl">Bạn bè ({{ totalFriends }})</span>
+
     <!-- Các ô tìm kiếm -->
     <div class="flex gap-2">
       <!-- Ô tìm kiếm bạn bè -->
@@ -13,11 +13,14 @@
           type="text" 
           placeholder="Tìm kiếm" 
           class="bg-gray-100 rounded-lg py-2 px-4 pl-10 w-full focus:outline-none"
+          [(ngModel)]="searchKeyword"
+          (ngModelChange)="onSearchChange($event)"
         >
       </div>
 
       <!-- Các lời mời kết bạn -->
       <button
+        routerLink="/user/friends/requests"
         class="flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 border border-gray-300 font-medium transition whitespace-nowrap"
       >
         <i class="fa-solid fa-user-plus text-blue-500"></i>
@@ -26,12 +29,12 @@
 
       <!-- Tìm thêm bạn bè -->
       <button
+        routerLink="/user/friends/suggests"
         class="flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 border border-gray-300 font-medium transition whitespace-nowrap"
       >
         Tìm bạn bè
       </button>
     </div>
-
   </div>
 
 
@@ -43,21 +46,31 @@
     >
       Tất cả bạn bè
     </button>
-    <button
-      *ngIf="currentUserLoggedIn?.profile?.username === currentUsername"
-      class="pb-2 font-medium"
-      [ngClass]="activeTab === 'followers' ? 'border-b-2 border-blue-500 text-blue-600' : 'text-gray-600'"
-      (click)="changeTab('followers')"
-    >
-      Người theo dõi
-    </button>
-    <button
-      class="pb-2 font-medium"
-      [ngClass]="activeTab === 'followings' ? 'border-b-2 border-blue-500 text-blue-600' : 'text-gray-600'"
-      (click)="changeTab('followings')"
-    >
-      Đang theo dõi
-    </button>
+    @if (currentUserLoggedIn?.profile?.username === currentUsername) {
+      <button
+        class="pb-2 font-medium"
+        [ngClass]="activeTab === 'followers' ? 'border-b-2 border-blue-500 text-blue-600' : 'text-gray-600'"
+        (click)="changeTab('followers')"
+      >
+        Người theo dõi
+      </button>
+      <button
+        class="pb-2 font-medium"
+        [ngClass]="activeTab === 'followings' ? 'border-b-2 border-blue-500 text-blue-600' : 'text-gray-600'"
+        (click)="changeTab('followings')"
+      >
+        Đang theo dõi
+      </button>
+    }
+    @else {
+      <button
+        class="pb-2 font-medium"
+        [ngClass]="activeTab === 'mutual' ? 'border-b-2 border-blue-500 text-blue-600' : 'text-gray-600'"
+        (click)="changeTab('mutual')"
+      >
+        Bạn chung ({{ mutualFriendsCount }})
+      </button>
+    }
   </div>
 
   <!-- Tất cả bạn bè -->
@@ -83,7 +96,7 @@
               [customClass]="'rounded-lg object-cover'"
             ></app-avatar>
           </a>
-          <div>
+          <div class="flex flex-col">
             <a
               [routerLink]="['/user/profile', friend.otherUser?.profile?.username]"
               class="font-medium hover:underline"
@@ -121,8 +134,38 @@
     </div>
   </div>
 
+  <!-- Bạn chung -->
+  <div *ngIf="activeTab === 'mutual'">
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div
+        *ngFor="let user of mutualFriends; let i = index"
+        class="flex items-center justify-between bg-white rounded-lg shadow-sm hover:shadow-md transition relative p-3"
+      >
+        <div class="flex items-center gap-3">
+          <a [routerLink]="['/user/profile', user?.profile?.username]">
+            <app-avatar
+              [avatarUrl]="user?.profile?.avatarUrl"
+              [width]="64"
+              [height]="64"
+              [customClass]="'rounded-lg object-cover'"
+            ></app-avatar>
+          </a>
+          <div>
+            <a
+              [routerLink]="['/user/profile', user?.profile?.username]"
+              class="font-medium hover:underline"
+            >
+              {{ user?.profile?.fullName || user?.profile?.username }}
+            </a>
+          </div>
+        </div>
+      </div>
+      <p *ngIf="mutualFriends.length === 0" class="text-gray-500 text-center text-lg">Không có bạn chung</p>
+    </div>
+  </div>
+
   <!-- Người theo dõi -->
-  <div *ngIf="activeTab === 'followers'">
+  <!-- <div *ngIf="activeTab === 'followers'">
     <div *ngIf="friendRequests.length > 0; else noRequest">
       <div
         *ngFor="let req of friendRequests"
@@ -156,10 +199,10 @@
     <ng-template #noRequest>
       <p class="text-gray-500">Không có người theo dõi nào.</p>
     </ng-template>
-  </div>
+  </div> -->
 
-  <!-- Tìm kiếm bạn bè -->
-  <div *ngIf="activeTab === 'followings'">
+  <!-- Đang theo dõi -->
+  <!-- <div *ngIf="activeTab === 'followings'">
     <div *ngIf="searchResults.length > 0; else noResult">
       <div
         *ngFor="let user of searchResults"
@@ -185,5 +228,5 @@
     <ng-template #noResult>
       <p class="text-gray-500">Không tìm thấy kết quả nào.</p>
     </ng-template>
-  </div>
+  </div> -->
 </div>

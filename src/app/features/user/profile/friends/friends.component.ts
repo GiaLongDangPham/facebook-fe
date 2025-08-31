@@ -25,16 +25,17 @@ export class FriendsComponent {
 
   @Input() currentUserLoggedIn: UserResponse | null = null;
   @Input() currentUsername: string | null = null;
-  friends: Friend[] = [];
+  friends: Friend[] = []; //Friends của người mình xem trang cá nhân
+  totalFriends: number = 0;
   openMenuIndex: number | null = null;
-  activeTab: 'all' | 'followers' | 'followings' = 'all';
-  friendRequests: any[] = [];
-  searchResults: any[] = [];
+  activeTab: 'all' | 'followers' | 'followings' | 'mutual' = 'all';
   searchKeyword: string = '';
-
+  searchTimeout: any;
+  mutualFriends: UserResponse[] = []; // Friends chung của mình và người mình đang xem
+  mutualFriendsCount: number = 0;
   // Infinite scroll
   page: number = 0;
-  size: number = 2;
+  size: number = 20;
   totalPages: number = 0;
   isLoading: boolean = false;
   
@@ -44,11 +45,13 @@ export class FriendsComponent {
 
   ngOnInit(): void {
     this.resetAndLoad();
+    this.getMutualFriends(this.currentUsername);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['currentUsername'] && !changes['currentUsername'].firstChange) {
       this.resetAndLoad();
+      this.getMutualFriends(this.currentUsername);
     }
   }
 
@@ -62,10 +65,35 @@ export class FriendsComponent {
     if (!this.currentUsername) return;
     this.userFriendService.getListFriends(this.currentUsername, this.page, this.size).subscribe({
       next: (response) => {
-        debugger
-        if (response && response.content && response.totalPages) {
+        if (response && response.content && response.totalPages && response.totalElements) {
+          debugger
           this.friends = [...this.friends, ...response.content];
           this.totalPages = response.totalPages;
+          this.totalFriends = response.totalElements;
+        }
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.error('Error loading friends:', error);
+        this.isLoading = false;
+      }
+    });
+  }
+  
+  loadMore() {
+    console.log('Loading more friends...');
+    if (this.page + 1 < this.totalPages) {
+      this.page++;
+      this.getListFriends();
+    }
+  }
+
+  getListFriendsByKeyWord() {
+    if (!this.currentUsername) return;
+    this.userFriendService.getListFriends(this.currentUsername, this.page, this.size, this.searchKeyword).subscribe({
+      next: (response) => {
+        if (response && response.content) {
+          this.friends = [...this.friends, ...response.content];
         }
         this.isLoading = false;
       },
@@ -76,12 +104,28 @@ export class FriendsComponent {
     });
   }
 
-  loadMore() {
-    console.log('Loading more friends...');
-    if (this.page + 1 < this.totalPages) {
-      this.page++;
-      this.getListFriends();
-    }
+  getMutualFriends(usernameParam: string | undefined | null) {
+    if (!usernameParam) return;
+    debugger
+    this.userFriendService.countMutualFriends(usernameParam).subscribe({
+      next: (response) => {
+        this.mutualFriends = response;
+        this.mutualFriendsCount = response.length;
+      },
+      error: (error) => {
+        console.error('Error counting mutual friends:', error);
+      }
+    });
+  }
+
+  // debounce khi gõ
+  onSearchChange(text: string) {
+    clearTimeout(this.searchTimeout);
+    this.searchTimeout = setTimeout(() => {
+      this.page = 0; // reset trang
+      this.friends = [];
+      this.getListFriendsByKeyWord();
+    }, 300); // chờ 300ms để gõ xong
   }
 
   toggleMenu(index: number): void {
@@ -104,38 +148,7 @@ export class FriendsComponent {
     }
   }
 
-  countFriends(): number {
-    return this.friends.filter(friend => friend.status === 'accepted').length;
-  }
-
-  changeTab(tab: 'all' | 'followers' | 'followings') {
+  changeTab(tab: 'all' | 'followers' | 'followings' | 'mutual') {
     this.activeTab = tab;
-  }
-
-  searchFriends() {
-    // if (!this.searchKeyword.trim()) {
-    //   this.searchResults = [];
-    //   return;
-    // }
-    // this.userFriendService.searchUsers(this.searchKeyword).subscribe((res) => {
-    //   this.searchResults = res;
-    // });
-  }
-
-  acceptRequest(req: any) {
-    // this.userFriendService.acceptRequest(req.id).subscribe(() => {
-    //   this.loadFriends();
-    // });
-  }
-
-  declineRequest(req: any) {
-    // this.userFriendService.declineRequest(req.id).subscribe(() => {
-    // });
-  }
-
-  sendFriendRequest(user: any) {
-    this.userFriendService.sendRequest(user.id).subscribe(() => {
-      this.searchFriends();
-    });
   }
 }

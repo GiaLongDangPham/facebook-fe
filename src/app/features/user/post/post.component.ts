@@ -51,10 +51,10 @@ export class PostComponent {
   ) { }
 
   ngOnInit() {
-    this.resetAndLoad();
     if (!this.currentUserLoggedIn) {
       this.currentUserLoggedIn = this.userService.getUserResponseFromLocalStorage();
     }
+    this.resetAndLoad();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -69,6 +69,16 @@ export class PostComponent {
     this.loadPosts();
   }
 
+  
+  loadMore() {
+    debugger
+    console.log('Scrolled!! page:', this.page, 'total:', this.totalPages);
+    if (this.page + 1 < this.totalPages) {
+      this.page++;
+      this.loadPosts();
+    }
+  }
+
   loadPosts() {
     if (this.isLoading) return;
     this.isLoading = true;
@@ -76,7 +86,7 @@ export class PostComponent {
     const request$ = this.currentUsername
       ? this.postService.getPostsByUser(this.currentUsername, this.page, this.size)
       : this.postService.getAllPosts(this.page, this.size);
-
+    debugger
     request$.subscribe({
       next: (res: PageResponse<PostResponse>) => {
         this.posts = [...this.posts, ...(res.content || [])];
@@ -90,14 +100,6 @@ export class PostComponent {
     });
   }
 
-  loadMore() {
-    debugger
-    console.log('Scrolled!! page:', this.page, 'total:', this.totalPages);
-    if (this.page + 1 < this.totalPages) {
-      this.page++;
-      this.loadPosts();
-    }
-  }
 
   // chọn file
   onFileSelected(event: Event) {

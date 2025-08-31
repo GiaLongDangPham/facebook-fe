@@ -92,8 +92,8 @@
       </div>
     }
     @else {
-    <button (click)="openEditModal()" class="bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded-lg">
-      Chỉnh sửa trang cá nhân</button>
+    <button (click)="openEditModal()" class="bg-gray-200 hover:bg-gray-300 text-black font-medium px-4 py-2 rounded-lg">
+      <i class="fa-solid fa-pen"></i> Chỉnh sửa trang cá nhân</button>
     }
   </div>
 
@@ -124,7 +124,10 @@
         <app-profile-photos [profile]="profile"></app-profile-photos>
       </div>
       <div *ngSwitchCase="'friends'">
-        <app-friends [currentUserLoggedIn]="currentUser" [currentUsername]="currentUsername"></app-friends>
+        <app-friends 
+          [currentUserLoggedIn]="currentUser" 
+          [currentUsername]="currentUsername"
+        ></app-friends>
       </div>
     </ng-container>
   </div>
