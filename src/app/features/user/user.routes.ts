@@ -5,11 +5,18 @@ import { MessagesComponent } from './messages/messages.component';
 import { ManageFriendsComponent } from './manage-friends/manage-friends.component';
 import { FriendRequestsComponent } from './manage-friends/friend-requests/friend-requests.component';
 import { FriendSuggestsComponent } from './manage-friends/friend-suggests/friend-suggests.component';
+import { PostDetailModalComponent } from './post/post-detail-modal/post-detail-modal.component';
 
 export const USER_ROUTES: Routes = [
   {
     path: 'posts',
-    component: PostComponent
+    component: PostComponent,
+    children: [
+      {
+        path: ':id',
+        component: PostDetailModalComponent
+      }
+    ]
   },
   {
     path: 'profile/:username',

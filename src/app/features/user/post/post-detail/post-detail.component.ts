@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
 import { PostResponse } from '../../../../core/interfaces/post/post';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -27,6 +27,7 @@ export class PostDetailComponent {
 
   @Input() post!: PostResponse;
   @Input() currentUserLoggedIn: UserResponse | null = null;
+  @Input() isModal: boolean = false;
   @Output() updatedPost = new EventEmitter<PostResponse>();
   @Output() deletedPost = new EventEmitter<string>();
   privacyPostId: string | null = null;
@@ -39,7 +40,16 @@ export class PostDetailComponent {
   ) { }
 
   ngOnInit() {
+    debugger
     this.totalComments = this.post.commentCount;
+    this.showCommentBox = this.isModal;
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['post'] && changes['post'].currentValue) {
+      this.totalComments = this.post.commentCount;
+      this.showCommentBox = this.isModal;
+    }
   }
 
   updatePrivacyPost(id: string, privacy: string) {

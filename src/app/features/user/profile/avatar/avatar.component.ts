@@ -1,10 +1,13 @@
 import { Component, Input } from '@angular/core';
 import { UserResponse } from '../../../../core/interfaces/user/user-response';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-avatar',
   standalone: true,
-  imports: [],
+  imports: [
+    CommonModule
+  ],
   templateUrl: './avatar.component.html',
   styleUrl: './avatar.component.scss'
 })

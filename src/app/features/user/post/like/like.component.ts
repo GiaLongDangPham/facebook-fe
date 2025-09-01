@@ -30,9 +30,14 @@ export class LikeComponent {
 
   toggleLike(){
     if(this.post?.id) {
-      this.likeService.toggleLike(this.post.id).subscribe(response => {
-        this.isLiked = response.isLiked;
-        this.totalLikes = this.isLiked ? this.totalLikes + 1 : this.totalLikes - 1;
+      this.likeService.toggleLike(this.post.id).subscribe({
+        next: (response) => {
+          this.isLiked = !this.isLiked;
+          this.totalLikes = this.isLiked ? this.totalLikes + 1 : this.totalLikes - 1;
+        },
+        error: (error) => {
+          console.error('Error toggling like:', error);
+        }
       });
     }
   }

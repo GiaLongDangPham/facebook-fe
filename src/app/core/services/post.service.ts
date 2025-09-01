@@ -28,6 +28,10 @@ export class PostService {
     });
   }
 
+  getPostById(id: string): Observable<PostResponse> {
+    return this.http.get<PostResponse>(`${this.baseUrl}/${id}`);
+  }
+
   getAllPosts(page: number, size: number): Observable<PageResponse<PostResponse>> {
     return this.http.get<PageResponse<PostResponse>>(`${this.baseUrl}`, {
       params: {

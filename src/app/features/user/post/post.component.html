@@ -55,7 +55,8 @@
   <div *ngIf="isLoading" class="text-center py-4 text-gray-500">
     Đang tải thêm...
   </div>
-
   <p *ngIf="posts.length === 0" class="text-gray-500 text-center text-lg">Chưa có bài viết nào</p>
-
 </div>
+
+<!-- outlet con để render modal -->
+<router-outlet></router-outlet>
