@@ -28,6 +28,7 @@ export class PostDetailComponent {
   @Input() post!: PostResponse;
   @Input() currentUserLoggedIn: UserResponse | null = null;
   @Input() isModal: boolean = false;
+  @Input() highlightCommentId: string | null = null;
   @Output() updatedPost = new EventEmitter<PostResponse>();
   @Output() deletedPost = new EventEmitter<string>();
   privacyPostId: string | null = null;

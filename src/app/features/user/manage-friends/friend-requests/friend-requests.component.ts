@@ -6,6 +6,7 @@ import { Friend } from '../../../../core/interfaces/user/user-friend';
 import { CommonModule } from '@angular/common';
 import { AvatarComponent } from '../../profile/avatar/avatar.component';
 import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-friend-requests',
@@ -13,7 +14,8 @@ import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
   imports: [
     CommonModule,
     AvatarComponent,
-    InfiniteScrollDirective
+    InfiniteScrollDirective,
+    RouterModule
   ],
   templateUrl: './friend-requests.component.html',
   styleUrl: './friend-requests.component.scss'

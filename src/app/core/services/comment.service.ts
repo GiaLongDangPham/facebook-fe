@@ -9,15 +9,18 @@ import { PageResponse } from '../interfaces/page';
   providedIn: 'root'
 })
 export class CommentService {
-  private baseUrl = environment.apiUrl + environment.apiVersion + '/posts/comments';
+  private baseUrl = environment.apiUrl + environment.apiVersion + '/posts';
   constructor(private http: HttpClient) {}
 
-  getCommentsByPost(postId: string): Observable<PageResponse<CommentResponse>> {
-    return this.http.get<PageResponse<CommentResponse>>(`${this.baseUrl}/${postId}`);
+  getCommentsByPost(postId: string, page: number, size: number): Observable<PageResponse<CommentResponse>> {
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString());
+    return this.http.get<PageResponse<CommentResponse>>(`${this.baseUrl}/${postId}/comments`, { params });
   }
 
   countComments(postId: string): Observable<{ totalComments: number }> {
-    return this.http.get<{ totalComments: number }>(`${this.baseUrl}/${postId}/total-comments`);
+    return this.http.get<{ totalComments: number }>(`${this.baseUrl}/${postId}/comments/total-comments`);
   }
  
   addComment(postId: string, content: string, parentId?: string, mentionedUserIds?: string[]): Observable<CommentResponse> {
@@ -31,12 +34,16 @@ export class CommentService {
         params = params.append("mentionedUserIds", id);
       });
     }
-    return this.http.post<CommentResponse>(`${this.baseUrl}/${postId}`, null,
-      { params }  
+    return this.http.post<CommentResponse>(`${this.baseUrl}/${postId}/comments`, null,
+      { params }
     );
   }
 
   getReplies(commentId: string): Observable<PageResponse<CommentResponse>> {
-    return this.http.get<PageResponse<CommentResponse>>(`${this.baseUrl}/${commentId}/replies`);
+    return this.http.get<PageResponse<CommentResponse>>(`${this.baseUrl}/comments/${commentId}/replies`);
+  }
+
+  getCommentById(id: string): Observable<CommentResponse> {
+    return this.http.get<CommentResponse>(`${this.baseUrl}/comments/${id}`);
   }
 }

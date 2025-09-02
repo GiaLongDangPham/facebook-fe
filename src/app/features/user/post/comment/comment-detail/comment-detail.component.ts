@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, ElementRef, Input } from '@angular/core';
 import { CommentResponse } from '../../../../../core/interfaces/post/comment/comment';
 import { CommentLikeService } from '../../../../../core/services/comment-like.service';
 import { TimeAgoPipe } from '../../../../../core/pipes/time-ago.pipe';
@@ -27,6 +27,7 @@ import { MentionHighlightPipe } from '../../../../../core/pipes/mention-highligh
 export class CommentDetailComponent {
   @Input() comment!: CommentResponse;
   @Input() currentUser: UserResponse | null = null;
+  @Input() highlightCommentId: string | null = null;
   isLiked: boolean = false;
   totalLikes: number = 0;
   showReplyBox = false;
@@ -38,11 +39,29 @@ export class CommentDetailComponent {
   constructor(
     private commentLikeService: CommentLikeService,
     private commentService: CommentService,
+    private el: ElementRef
   ) {}
 
   ngOnInit() {
+    debugger
     this.getIsLiked();
     this.getTotalLikes();
+    console.log(this.el.nativeElement)
+  }
+
+  ngAfterViewInit() {
+    debugger
+    if (this.highlightCommentId && this.highlightCommentId === this.comment.id) {
+      const nativeElement = this.el.nativeElement.querySelector('#comment-' + this.comment.id);
+      debugger
+      if (nativeElement) {
+        nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        nativeElement.classList.remove('bg-gray-100'); // highlight
+        nativeElement.classList.add('bg-blue-100', 'rounded-lg'); // highlight
+
+        // setTimeout(() => nativeElement.classList.remove('bg-blue-100', 'rounded-lg'), 3000);
+      }
+    }
   }
 
   toggleLike(){

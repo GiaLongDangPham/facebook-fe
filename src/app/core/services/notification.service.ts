@@ -13,7 +13,7 @@ export class NotificationService {
 
   private baseUrl = environment.apiUrl + environment.apiVersion + '/notifications';
   private client: Client | null = null;
-  public notifications$ = new BehaviorSubject<any[]>([]);
+  public notifications$ = new BehaviorSubject<NotificationResponse | null>(null);
 
   constructor(
     private http: HttpClient
@@ -34,7 +34,8 @@ export class NotificationService {
         `/topic/notification/${recipientId}`, 
         (noti) => {
           const notification = JSON.parse(noti.body);
-          this.notifications$.next([notification, ...this.notifications$.getValue()]);
+          debugger
+          this.notifications$.next(notification);
         }
       );
     }
@@ -66,12 +67,16 @@ export class NotificationService {
     return this.http.get<{ countUnseen: number }>(`${this.baseUrl}/${recipientId}/count-unseen`);
   }
 
-  updateNotificationState(targetId: string, actionType: ActionEnum, state: StateEnum): Observable<void> {
-    return this.http.patch<void>(`${this.baseUrl}?targetId=${targetId}&actionType=${actionType}&newState=${state}`,
+  updateNotificationState(targetId: string, actionType: ActionEnum, recipientId: string, state: StateEnum): Observable<void> {
+    return this.http.patch<void>(`${this.baseUrl}?targetId=${targetId}&actionType=${actionType}&recipientId=${recipientId}&newState=${state}`,
     {});
   }
 
   markAllSeen(): Observable<void> {
     return this.http.patch<void>(`${this.baseUrl}/mark-all-seen`, {});
+  }
+
+  deleteById(notificationId: string): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/${notificationId}`);
   }
 }

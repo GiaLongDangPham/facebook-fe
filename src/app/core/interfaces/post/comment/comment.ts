@@ -5,7 +5,7 @@ export interface CommentResponse {
   postId: string;
   author: UserResponse;
   content: string;
-  parent: string;
+  parentId: string;
   repliesCount: number;
   createdAt: Date;
   updatedAt: Date;

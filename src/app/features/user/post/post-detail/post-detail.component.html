@@ -125,6 +125,7 @@
       [post]="post" 
       [currentUser]="currentUserLoggedIn"
       [commentLocked]="post.commentLocked"
+      [highlightCommentId]="highlightCommentId"
       (addCommentEvent)="totalComments = totalComments! + 1"
     ></app-comment>
   </div>

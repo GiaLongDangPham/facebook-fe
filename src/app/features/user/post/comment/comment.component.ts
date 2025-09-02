@@ -29,10 +29,12 @@ export class CommentComponent {
   @Input() post: PostResponse | null = null;
   @Input() currentUser: UserResponse | null = null;
   @Input() commentLocked?: boolean;
+  @Input() highlightCommentId: string | null = null;
   @Output() totalCommentsEvent = new EventEmitter<number>();
   @Output() addCommentEvent = new EventEmitter<boolean>();
   comments: CommentResponse[] = [];
   newComment: string = '';
+  showReplies: boolean = false;
 
   constructor(
     private commentService: CommentService,
@@ -44,10 +46,9 @@ export class CommentComponent {
 
   loadComments() {
     if(this.post?.id){
-      this.commentService.getCommentsByPost(this.post.id).subscribe({
+      this.commentService.getCommentsByPost(this.post.id, 0, 10).subscribe({
         next: (res: PageResponse<CommentResponse>) => {
-          debugger
-          if(res.content) this.comments = res.content;
+          this.comments = res.content || [];
         },
         error: (err) => {
           console.error('Lỗi load comments', err);

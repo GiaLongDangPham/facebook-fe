@@ -1,0 +1,151 @@
+<div class="p-2 hover:bg-gray-300 rounded cursor-pointer mb-2 relative"
+    (click)="goTo(noti)"
+    [ngClass]="{
+      'bg-white': noti.state === StateEnum.SEEN_AND_READ,
+      'bg-gray-200': noti.state === StateEnum.UNSEEN || noti.state === StateEnum.SEEN
+    }"
+>
+  <!-- Hàng ngang chia làm 2 phần: avatar+content và nút 3 chấm -->
+  <div class="flex items-center justify-between">
+    <!-- Bên trái: avatar + nội dung -->
+    <div class="flex gap-2 flex-1">
+      <div class="flex-shrink-0">
+        <app-avatar
+          [avatarUrl]="noti.actor.profile.avatarUrl"
+          [width]="50"
+          [height]="50"
+          [customClass]="'border border-gray-300'"
+        ></app-avatar>
+      </div>
+      <div [ngSwitch]="noti.actionType">
+  
+        <!-- LIKE POST -->
+        <div *ngSwitchCase="ActionEnum.LIKE_POST">
+          <div class="text-base text-gray-700">
+            <ng-container [ngSwitch]="noti.actorCount">
+              <!-- Trường hợp 1 người -->
+              <ng-container *ngSwitchCase="1">
+                <span class="font-semibold">
+                  {{ noti.actor.profile.fullName || noti.actor.profile.username }}
+                </span>
+                <span> đã thích bài viết của bạn</span>
+              </ng-container>
+  
+              <!-- Trường hợp 2 người -->
+              <ng-container *ngSwitchCase="2">
+                <span class="font-semibold">
+                  {{ noti.actor.profile.fullName || noti.actor.profile.username }}
+                </span>
+                và <span class="font-semibold">1 người khác</span>
+                <span> đã thích bài viết của bạn</span>
+              </ng-container>
+  
+              <!-- Trường hợp nhiều người -->
+              <ng-container *ngSwitchDefault>
+                <span class="font-semibold">
+                  {{ noti.actor.profile.fullName || noti.actor.profile.username }}
+                </span>
+                và <span class="font-semibold">{{ noti.actorCount - 1 }} người khác</span>
+                <span> đã thích bài viết của bạn</span>
+              </ng-container>
+            </ng-container>
+          </div>
+        </div>
+  
+        <!-- COMMENT POST -->
+        <div *ngSwitchCase="ActionEnum.COMMENT_POST">
+          <div class="text-base text-gray-700">
+            <ng-container [ngSwitch]="noti.actorCount">
+              <!-- Trường hợp 1 người -->
+              <ng-container *ngSwitchCase="1">
+                <span class="font-semibold">
+                  {{ noti.actor.profile.fullName || noti.actor.profile.username }}
+                </span>
+                <span> đã bình luận về bài viết của bạn</span>
+              </ng-container>
+  
+              <!-- Trường hợp 2 người -->
+              <ng-container *ngSwitchCase="2">
+                <span class="font-semibold">
+                  {{ noti.actor.profile.fullName || noti.actor.profile.username }}
+                </span>
+                và <span class="font-semibold">1 người khác</span>
+                <span> đã bình luận về bài viết của bạn</span>
+              </ng-container>
+  
+              <!-- Trường hợp nhiều người -->
+              <ng-container *ngSwitchDefault>
+                <span class="font-semibold">
+                  {{ noti.actor.profile.fullName || noti.actor.profile.username }}
+                </span>
+                và <span class="font-semibold">{{ noti.actorCount - 1 }} người khác</span>
+                <span> đã bình luận về bài viết của bạn</span>
+              </ng-container>
+            </ng-container>
+          </div>
+        </div>
+  
+        <!-- ADD FRIEND -->
+        <div *ngSwitchCase="ActionEnum.ADD_FRIEND">
+          <span class="font-semibold">
+            {{ noti.actor.profile.fullName || noti.actor.profile.username }}
+          </span>
+          <span> đã gửi lời mời kết bạn cho bạn</span>
+          <div class="flex gap-3">
+            <button 
+              (click)="acceptFriendRequest(noti.actor.id); $event.stopPropagation()"
+              class="px-2 py-1 text-sm rounded bg-blue-500 text-white hover:bg-blue-600">
+              Chấp nhận
+            </button>
+            <button 
+              (click)="rejectFriendRequest(noti.actor.id); $event.stopPropagation()"
+              class="px-2 py-1 text-sm rounded bg-gray-300 hover:bg-gray-400">
+              Từ chối
+            </button>
+          </div>
+        </div>
+  
+        <!-- ACCEPT FRIEND -->
+        <div *ngSwitchCase="ActionEnum.ACCEPT_FRIEND">
+          <span class="font-semibold">
+            {{ noti.actor.profile.fullName || noti.actor.profile.username }}
+          </span>
+          <span> đã chấp nhận lời mời kết bạn của bạn</span>
+        </div>
+  
+        <!-- COMMENT TAG -->
+        <div *ngSwitchCase="ActionEnum.COMMENT_TAG">
+        </div>
+  
+        <div class="text-xs text-gray-400">
+          {{ noti.updatedAt | timeAgo }}
+        </div>
+      </div>
+  
+  
+      
+    </div>
+    <!-- Bên phải: nút dropdown -->
+    <div class="relative ml-2">
+      <button 
+        (click)="toggleDropdown($event)" 
+        class="p-1 rounded-full hover:bg-gray-400"
+      >
+        <i class="fa-solid fa-ellipsis-vertical"></i>
+      </button>
+
+      <!-- Dropdown menu -->
+      <div 
+        *ngIf="showDropdown" 
+        class="absolute right-0 mt-1 w-56 bg-white border border-gray-300 rounded shadow-lg z-10"
+      >
+        <button 
+          (click)="deleteNotification(noti.id); $event.stopPropagation()" 
+          class="block w-full text-left px-4 py-2 hover:bg-gray-100"
+        >
+          <i class="fa-regular fa-circle-xmark"></i> Xóa thông báo
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -20,6 +20,7 @@ export class PostDetailModalComponent {
   postId!: string;
   post!: PostResponse;
   currentUser: UserResponse | null = null;
+  highlightCommentId: string | null = null;
 
   constructor(
     private route: ActivatedRoute, 
@@ -36,6 +37,14 @@ export class PostDetailModalComponent {
         next: (post) => {
           debugger
           this.post = post;
+
+          // sau khi load post thì check query param highlightComment
+          this.route.queryParamMap.subscribe(queryParams => {
+            const highlightCommentId = queryParams.get('highlightComment');
+            if (highlightCommentId) {
+              this.highlightCommentId = highlightCommentId;
+            }
+          });
         },
         error: (error) => {
           console.error('Error fetching post details:', error);

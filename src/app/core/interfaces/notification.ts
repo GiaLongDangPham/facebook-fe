@@ -1,6 +1,7 @@
 import { UserResponse } from "./user/user-response";
 
 export interface NotificationResponse {
+  id: string;
   targetId: string;
   actor: UserResponse;
   actionPerformedId: string;
@@ -20,7 +21,6 @@ export interface NotificationResponse {
 export enum ActionEnum {
   LIKE_POST = 'LIKE_POST',
   COMMENT_POST = 'COMMENT_POST',
-  COMMENT_REPLY = 'COMMENT_REPLY',
   ADD_FRIEND = 'ADD_FRIEND',
   ACCEPT_FRIEND = 'ACCEPT_FRIEND',
   COMMENT_TAG = 'COMMENT_TAG',

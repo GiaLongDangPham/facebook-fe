@@ -55,10 +55,12 @@ export class TopNavbarComponent {
   connectToWebSocket() {
     if (!this.currentUser?.id) return;
     this.notificationService.connect(this.currentUser?.id);
-    this.notificationSub = this.notificationService.notifications$.subscribe((noti) => {
+    this.notificationSub = this.notificationService.notifications$.subscribe((noti: NotificationResponse | null) => {
       debugger
-      this.notifications = noti;
-      this.unseenCount = noti.filter(n => n.state === 'UNSEEN').length;
+      if (noti) {
+        this.notifications = [noti, ...this.notifications];
+        this.unseenCount = this.notifications.filter(n => n.state === 'UNSEEN').length;
+      }
     });
   }
 
@@ -93,11 +95,11 @@ export class TopNavbarComponent {
     this.showUserMenu = false;
     if (this.showNoti && this.unseenCount != 0) {
       this.notificationService.markAllSeen().subscribe(() => {
-        // this.notifications.forEach(n => {
-        //   if (n.state === StateEnum.UNSEEN) {
-        //     n.state = StateEnum.SEEN;
-        //   }
-        // });
+        this.notifications.forEach(n => {
+          if (n.state === StateEnum.UNSEEN) {
+            n.state = StateEnum.SEEN;
+          }
+        });
         this.unseenCount = 0;
       });
     }
