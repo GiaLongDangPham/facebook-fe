@@ -35,12 +35,22 @@
       </div>
 
       <div>
-        <label class="block text-sm font-medium text-gray-700">Username (tên ingame)</label>
+        <label class="block text-sm font-medium text-gray-700">Username (tên trên url)</label>
         <input type="text" placeholder="Nhập username (ví dụ: gamer123, ...)" 
                class="mt-1 block w-full px-4 py-2 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none"
                (keydown.enter)="register()"
                [(ngModel)]="user.username"
                name="username"
+        />
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Họ và Tên (tên ingame)</label>
+        <input type="text" placeholder="Nhập họ và tên (ví dụ: Nguyễn Văn A, ...)" 
+               class="mt-1 block w-full px-4 py-2 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none"
+               (keydown.enter)="register()"
+               [(ngModel)]="user.fullName"
+               name="fullName"
         />
       </div>
 

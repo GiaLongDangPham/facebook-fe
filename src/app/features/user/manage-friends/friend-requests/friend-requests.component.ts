@@ -96,6 +96,7 @@ export class FriendRequestsComponent {
   }
 
   getDisplayName(friend: Friend): string {
-    return friend.otherUser?.profile.fullName || friend.otherUser?.profile.username || 'Unknown';
+    return friend.otherUser?.profile.fullName || 'Unknown';
   }
 }
+ 

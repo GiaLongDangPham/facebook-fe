@@ -26,7 +26,7 @@
               <!-- Trường hợp 1 người -->
               <ng-container *ngSwitchCase="1">
                 <span class="font-semibold">
-                  {{ noti.actor.profile.fullName || noti.actor.profile.username }}
+                  {{ noti.actor.profile.fullName }}
                 </span>
                 <span> đã thích bài viết của bạn</span>
               </ng-container>
@@ -34,7 +34,7 @@
               <!-- Trường hợp 2 người -->
               <ng-container *ngSwitchCase="2">
                 <span class="font-semibold">
-                  {{ noti.actor.profile.fullName || noti.actor.profile.username }}
+                  {{ noti.actor.profile.fullName }}
                 </span>
                 và <span class="font-semibold">1 người khác</span>
                 <span> đã thích bài viết của bạn</span>
@@ -43,7 +43,7 @@
               <!-- Trường hợp nhiều người -->
               <ng-container *ngSwitchDefault>
                 <span class="font-semibold">
-                  {{ noti.actor.profile.fullName || noti.actor.profile.username }}
+                  {{ noti.actor.profile.fullName }}
                 </span>
                 và <span class="font-semibold">{{ noti.actorCount - 1 }} người khác</span>
                 <span> đã thích bài viết của bạn</span>
@@ -59,7 +59,7 @@
               <!-- Trường hợp 1 người -->
               <ng-container *ngSwitchCase="1">
                 <span class="font-semibold">
-                  {{ noti.actor.profile.fullName || noti.actor.profile.username }}
+                  {{ noti.actor.profile.fullName }}
                 </span>
                 <span> đã bình luận về bài viết của bạn</span>
               </ng-container>
@@ -67,7 +67,7 @@
               <!-- Trường hợp 2 người -->
               <ng-container *ngSwitchCase="2">
                 <span class="font-semibold">
-                  {{ noti.actor.profile.fullName || noti.actor.profile.username }}
+                  {{ noti.actor.profile.fullName }}
                 </span>
                 và <span class="font-semibold">1 người khác</span>
                 <span> đã bình luận về bài viết của bạn</span>
@@ -76,7 +76,7 @@
               <!-- Trường hợp nhiều người -->
               <ng-container *ngSwitchDefault>
                 <span class="font-semibold">
-                  {{ noti.actor.profile.fullName || noti.actor.profile.username }}
+                  {{ noti.actor.profile.fullName }}
                 </span>
                 và <span class="font-semibold">{{ noti.actorCount - 1 }} người khác</span>
                 <span> đã bình luận về bài viết của bạn</span>
@@ -88,7 +88,7 @@
         <!-- ADD FRIEND -->
         <div *ngSwitchCase="ActionEnum.ADD_FRIEND">
           <span class="font-semibold">
-            {{ noti.actor.profile.fullName || noti.actor.profile.username }}
+            {{ noti.actor.profile.fullName }}
           </span>
           <span> đã gửi lời mời kết bạn cho bạn</span>
           <div class="flex gap-3">
@@ -108,7 +108,7 @@
         <!-- ACCEPT FRIEND -->
         <div *ngSwitchCase="ActionEnum.ACCEPT_FRIEND">
           <span class="font-semibold">
-            {{ noti.actor.profile.fullName || noti.actor.profile.username }}
+            {{ noti.actor.profile.fullName }}
           </span>
           <span> đã chấp nhận lời mời kết bạn của bạn</span>
         </div>

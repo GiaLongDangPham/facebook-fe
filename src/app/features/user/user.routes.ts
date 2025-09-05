@@ -24,7 +24,7 @@ export const USER_ROUTES: Routes = [
   },
   {
     path: 'messages',
-    component: MessagesComponent
+    loadChildren: () => import('./messages/messages.routes').then(m => m.MESSAGES_ROUTES)
   },
   {
     path: 'friends',

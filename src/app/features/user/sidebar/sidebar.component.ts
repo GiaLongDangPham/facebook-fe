@@ -21,7 +21,7 @@ export class SidebarComponent {
 
 
   get displayName(): string {
-    const name = this.currentUser?.profile?.fullName || this.currentUser?.profile?.username || '';
+    const name = this.currentUser?.profile?.fullName || '';
     return name.length > 15 ? name.slice(0, 15) + '...' : name;
   }
 }

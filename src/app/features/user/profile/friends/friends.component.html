@@ -101,7 +101,7 @@
               [routerLink]="['/user/profile', friend.otherUser?.profile?.username]"
               class="font-medium hover:underline"
             >
-              {{ friend.otherUser?.profile?.fullName || friend.otherUser?.profile?.username }}
+              {{ friend.otherUser?.profile?.fullName }}
             </a>
           </div>
         </div>
@@ -155,7 +155,7 @@
               [routerLink]="['/user/profile', user?.profile?.username]"
               class="font-medium hover:underline"
             >
-              {{ user?.profile?.fullName || user?.profile?.username }}
+              {{ user?.profile?.fullName }}
             </a>
           </div>
         </div>
@@ -178,7 +178,7 @@
             [height]="48"
             [customClass]="'rounded-lg object-cover'"
           ></app-avatar>
-          <span>{{ req.sender?.profile?.fullName || req.sender?.username }}</span>
+          <span>{{ req.sender?.profile?.fullName }}</span>
         </div>
         <div class="flex gap-2">
           <button
@@ -215,7 +215,7 @@
             [height]="48"
             [customClass]="'rounded-lg object-cover'"
           ></app-avatar>
-          <span>{{ user.profile?.fullName || user.username }}</span>
+          <span>{{ user.profile?.fullName }}</span>
         </div>
         <button
           class="px-3 py-1 rounded-lg bg-blue-500 text-white hover:bg-blue-600"

@@ -1,0 +1,7 @@
+.owner {
+  flex-direction: row-reverse;
+}
+
+.owner > app-avatar {
+  display: none;
+}

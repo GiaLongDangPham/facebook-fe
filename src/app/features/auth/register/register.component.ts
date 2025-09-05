@@ -21,7 +21,8 @@ export class RegisterComponent {
   user: RegisterRequest = {
     email: '',
     password: '',
-    username: ''
+    username: '',
+    fullName: ''
   };
 
   constructor(

@@ -12,7 +12,7 @@
         [customClass]="'rounded-full border-4 border-white shadow-lg object-cover'"></app-avatar>
     </div>
     <div class="flex-1">
-      <h1 class="text-2xl font-bold">{{ profile?.fullName || profile?.username }}</h1>
+      <h1 class="text-2xl font-bold">{{ profile?.fullName }}</h1>
       <p class="text-gray-600 min-h-[24px]">{{ profile?.bio }}</p>
     </div>
     @if (!isOwner) {

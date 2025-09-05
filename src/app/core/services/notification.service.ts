@@ -29,7 +29,7 @@ export class NotificationService {
     });
 
     this.client.onConnect = () => {
-      console.log('Connected to WebSocket');
+      console.log('Connected to WebSocket from NotificationService');
       this.client?.subscribe(
         `/topic/notification/${recipientId}`, 
         (noti) => {
