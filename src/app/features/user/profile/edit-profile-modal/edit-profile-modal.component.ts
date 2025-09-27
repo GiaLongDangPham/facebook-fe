@@ -3,9 +3,9 @@ import { UserProfileResponse } from '../../../../core/interfaces/user/user-profi
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { FileService } from '../../../../core/services/file.service';
-import { AvatarComponent } from '../avatar/avatar.component';
 import { UserResponse } from '../../../../core/interfaces/user/user-response';
 import { forkJoin, tap } from 'rxjs';
+import { AvatarComponent } from '../../../../shared/avatar/avatar.component';
 
 @Component({
   selector: 'app-edit-profile-modal',
@@ -100,25 +100,6 @@ export class EditProfileModalComponent {
     }
   }
 
-  // uploadCoverUrl() {
-  //   debugger
-  //   if (!this.selectedCoverUrl) return;
-
-  //   this.fileService.uploadFile(this.selectedCoverUrl).subscribe({
-  //     next: (res) => {
-  //       this.editedProfile = { ...this.profile }; // clone dữ liệu
-  //       this.editedProfile.coverUrl = res.url;
-  //       this.save.emit(this.editedProfile);
-  //       debugger
-  //     },
-  //     error: (err) => {
-  //       debugger
-  //       console.error('Error uploading cover:', err);
-  //       alert('Upload ảnh thất bại');
-  //     }
-  //   });
-  // }
-
   onAvatarSelected(event: Event) {
     debugger
     const fileInput = event.target as HTMLInputElement;
@@ -128,23 +109,4 @@ export class EditProfileModalComponent {
       this.previewUrl = URL.createObjectURL(file); // Hiển thị preview
     }
   }
-
-  // uploadAvatar() {
-  //   debugger
-  //   if (!this.selectedAvatar) return;
-
-  //   this.fileService.uploadFile(this.selectedAvatar).subscribe({
-  //     next: (res) => {
-  //       this.editedProfile = { ...this.profile }; // clone dữ liệu
-  //       this.editedProfile.avatarUrl = res.url;
-  //       this.save.emit(this.editedProfile);
-  //       debugger
-  //     },
-  //     error: (err) => {
-  //       debugger
-  //       console.error('Error uploading avatar:', err);
-  //       alert('Upload ảnh thất bại');
-  //     }
-  //   });
-  // }
 }

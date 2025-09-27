@@ -3,13 +3,11 @@ import { PostResponse } from '../../../../core/interfaces/post/post';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { UserResponse } from '../../../../core/interfaces/user/user-response';
-import { AvatarComponent } from '../../profile/avatar/avatar.component';
+import { AvatarComponent } from '../../../../shared/avatar/avatar.component';
 import { CommentService } from '../../../../core/services/comment.service';
 import { CommentResponse } from '../../../../core/interfaces/post/comment/comment';
 import { PageResponse } from '../../../../core/interfaces/page';
 import { RouterModule } from '@angular/router';
-import { TimeAgoPipe } from '../../../../core/pipes/time-ago.pipe';
-import { CommentLikeService } from '../../../../core/services/comment-like.service';
 import { CommentDetailComponent } from './comment-detail/comment-detail.component';
 
 @Component({

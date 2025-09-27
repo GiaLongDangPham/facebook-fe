@@ -2,8 +2,11 @@
 <div class="flex items-center justify-between p-4">
   <div class="flex items-center gap-3">
     <a routerLink="/user/profile/{{ post.author.profile.username }}">
-      <app-avatar [avatarUrl]="post.author.profile.avatarUrl" [width]="40" [height]="40"
-        [customClass]="'rounded-full object-cover'"></app-avatar>
+      <app-avatar 
+        [avatarUrl]="post.author.profile.avatarUrl" 
+        [width]="40" 
+        [height]="40"
+      ></app-avatar>
     </a>
 
     <div>

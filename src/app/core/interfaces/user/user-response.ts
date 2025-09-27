@@ -6,4 +6,6 @@ export interface UserResponse {
   status: string;
   role: string;
   profile: UserProfileResponse;
+
+  lastOffline?: number; // Unix timestamp in milliseconds
 }

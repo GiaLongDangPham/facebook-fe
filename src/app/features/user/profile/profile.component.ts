@@ -10,10 +10,10 @@ import { EditProfileModalComponent } from './edit-profile-modal/edit-profile-mod
 import { ToastrService } from 'ngx-toastr';
 import { ProfileAboutComponent } from './profile-about/profile-about.component';
 import { ProfilePhotosComponent } from './profile-photos/profile-photos.component';
-import { AvatarComponent } from './avatar/avatar.component';
 import { FriendsComponent } from './friends/friends.component';
 import { Friend } from '../../../core/interfaces/user/user-friend';
 import { UserFriendService } from '../../../core/services/user-friend.service';
+import { AvatarComponent } from '../../../shared/avatar/avatar.component';
 
 @Component({
   selector: 'app-profile',
@@ -189,6 +189,7 @@ export class ProfileComponent {
   saveProfile(updated: UserProfileResponse) {
     this.profile = updated;
     this.showEditModal = false;
+    debugger
     this.profileService.updateProfile(this.currentUser!.id, this.profile!).subscribe({
       next: (response) => {
         this.toastr.success('Cập nhật thông tin thành công');

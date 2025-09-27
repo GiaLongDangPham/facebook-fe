@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { NavigationEnd, Router, RouterModule } from "@angular/router";
 import { UserResponse } from '../../core/interfaces/user/user-response';
 import { UserService } from '../../core/services/user.service';
@@ -39,5 +39,21 @@ export class UserComponent {
 
   ngOnInit(): void {
     this.currentUser = this.userService.getUserResponseFromLocalStorage();
+    // Kết nối websocket user online
+    if (!this.currentUser) return;
+    this.userService.connect(this.currentUser);
+  }
+
+  // Auto disconnect khi đóng tab / reload
+  @HostListener('window:beforeunload', ['$event'])
+  unloadHandler(event: Event) {
+    if (!this.currentUser) return;
+    this.userService.disconnect(this.currentUser);
+  }
+
+  ngOnDestroy(): void {
+    if (!this.currentUser) return;
+    // Cũng disconnect khi component destroy
+    this.userService.disconnect(this.currentUser);
   }
 }

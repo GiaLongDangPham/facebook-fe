@@ -14,13 +14,13 @@
           [avatarUrl]="currentUserLoggedIn?.profile?.avatarUrl" 
           [width]="48" 
           [height]="48" 
-          [customClass]="'rounded-full border-2 border-white shadow-sm'"
+          [customClass]="'border-2 border-white shadow-sm'"
       ></app-avatar>
 
       <textarea 
         [(ngModel)]="content"
         placeholder="Bạn đang nghĩ gì thế?" 
-        class="w-full px-4 py-2 rounded-lg border bg-gray-100 focus:outline-none"
+        class="flex-1 px-4 py-2 rounded-lg border bg-gray-100 focus:outline-none"
       ></textarea>
     </div>
 

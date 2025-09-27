@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ActionEnum, NotificationResponse, StateEnum } from '../../../../core/interfaces/notification';
 import { CommonModule } from '@angular/common';
-import { AvatarComponent } from '../../profile/avatar/avatar.component';
+import { AvatarComponent } from '../../../../shared/avatar/avatar.component';
 import { TimeAgoPipe } from '../../../../core/pipes/time-ago.pipe';
 import { Router } from '@angular/router';
 import { NotificationService } from '../../../../core/services/notification.service';

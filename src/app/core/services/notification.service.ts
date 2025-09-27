@@ -22,9 +22,6 @@ export class NotificationService {
   connect(recipientId: string) {
     this.client = new Client({
       webSocketFactory: () => new SockJS('http://localhost:8080/ws'), // URL backend config
-      debug: (str) => {
-        console.log('STOMP: ' + str);
-      },
       reconnectDelay: 5000
     });
 

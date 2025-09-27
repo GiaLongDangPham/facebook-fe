@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, EventEmitter, Input, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { ConversationResponse } from '../../../../../core/interfaces/conversation/conversation';
-import { AvatarComponent } from '../../../profile/avatar/avatar.component';
+import { AvatarComponent } from '../../../../../shared/avatar/avatar.component';
 import { UserResponse } from '../../../../../core/interfaces/user/user-response';
 import { MessageResponse } from '../../../../../core/interfaces/conversation/messages';
 import { MessageService } from '../../../../../core/services/message.service';

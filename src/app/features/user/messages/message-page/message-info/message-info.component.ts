@@ -2,8 +2,8 @@ import { Component, Input } from '@angular/core';
 import { ConversationResponse } from '../../../../../core/interfaces/conversation/conversation';
 import { UserResponse } from '../../../../../core/interfaces/user/user-response';
 import { CommonModule } from '@angular/common';
-import { AvatarComponent } from '../../../profile/avatar/avatar.component';
 import { RouterModule } from '@angular/router';
+import { AvatarComponent } from '../../../../../shared/avatar/avatar.component';
 
 @Component({
   selector: 'app-message-info',

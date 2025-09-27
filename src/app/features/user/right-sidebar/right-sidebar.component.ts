@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { UserResponse } from '../../../core/interfaces/user/user-response';
 import { RouterModule } from '@angular/router';
-import { AvatarComponent } from '../profile/avatar/avatar.component';
+import { AvatarComponent } from '../../../shared/avatar/avatar.component';
 import { CommonModule } from '@angular/common';
 
 @Component({

@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { AvatarComponent } from '../../../profile/avatar/avatar.component';
+import { AvatarComponent } from '../../../../../shared/avatar/avatar.component';
 import { ConversationResponse } from '../../../../../core/interfaces/conversation/conversation';
 import { ConversationsService } from '../../../../../core/services/conversations.service';
 import { UserResponse } from '../../../../../core/interfaces/user/user-response';

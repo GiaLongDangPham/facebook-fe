@@ -4,9 +4,9 @@ import { UserService } from '../../../../core/services/user.service';
 import { UserFriendService } from '../../../../core/services/user-friend.service';
 import { Friend } from '../../../../core/interfaces/user/user-friend';
 import { CommonModule } from '@angular/common';
-import { AvatarComponent } from '../../profile/avatar/avatar.component';
 import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 import { RouterModule } from '@angular/router';
+import { AvatarComponent } from '../../../../shared/avatar/avatar.component';
 
 @Component({
   selector: 'app-friend-requests',
@@ -45,6 +45,7 @@ export class FriendRequestsComponent {
     if (this.currentUser) {
       this.userFriendService.getFriendRequests(this.currentUser.id, this.page, this.size).subscribe({
         next: (response) => {
+          debugger
           if (response && response.content) {
             this.friendRequests = [...this.friendRequests, ...response.content];
             this.totalPages = response.totalPages;

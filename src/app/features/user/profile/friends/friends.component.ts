@@ -4,7 +4,7 @@ import { Friend } from '../../../../core/interfaces/user/user-friend';
 import { UserFriendService } from '../../../../core/services/user-friend.service';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { AvatarComponent } from '../avatar/avatar.component';
+import { AvatarComponent } from '../../../../shared/avatar/avatar.component';
 import { FormsModule } from '@angular/forms';
 import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 

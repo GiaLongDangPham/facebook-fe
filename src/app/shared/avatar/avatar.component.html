@@ -1,0 +1,23 @@
+<div class="relative inline-block">
+  <img
+    [src]="previewUrl || avatarUrl || 'assets/default-avatar.jpg'"
+    alt="avatar"
+    class="rounded-full object-cover"
+    [style.width.px]="width"
+    [style.height.px]="height"
+    [ngClass]="customClass"
+  />
+  <!-- Chấm xanh -->
+  <span
+    *ngIf="isOnline"
+    class="absolute bottom-0 right-0 w-3 h-3 bg-green-700 border-2 border-white rounded-full"
+  ></span>
+
+  <!-- Offline: thời gian -->
+  <span
+    *ngIf="!isOnline && lastOffline"
+    class="absolute bottom-0 translate-x-1.5 right-0 text-[11px] font-semibold text-green-700 bg-white border border-green-600 rounded-full px-1 leading-none"
+  >
+    {{ getOfflineTime(lastOffline) }}
+  </span>
+</div>

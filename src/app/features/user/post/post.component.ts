@@ -10,7 +10,7 @@ import { PostRequest } from '../../../core/interfaces/post/post-request';
 import { PostMediaRequest } from '../../../core/interfaces/post/post-media-request';
 import { PageResponse } from '../../../core/interfaces/page';
 import { forkJoin } from 'rxjs';
-import { AvatarComponent } from '../profile/avatar/avatar.component';
+import { AvatarComponent } from '../../../shared/avatar/avatar.component';
 import { UserService } from '../../../core/services/user.service';
 import { RouterModule } from '@angular/router';
 import { PostDetailComponent } from './post-detail/post-detail.component';

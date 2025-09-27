@@ -3,7 +3,7 @@ import { CommentResponse } from '../../../../../core/interfaces/post/comment/com
 import { CommentLikeService } from '../../../../../core/services/comment-like.service';
 import { TimeAgoPipe } from '../../../../../core/pipes/time-ago.pipe';
 import { CommonModule } from '@angular/common';
-import { AvatarComponent } from '../../../profile/avatar/avatar.component';
+import { AvatarComponent } from '../../../../../shared/avatar/avatar.component';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommentService } from '../../../../../core/services/comment.service';

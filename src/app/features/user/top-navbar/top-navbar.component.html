@@ -1,5 +1,5 @@
 <div class="pt-14">
-  <header class="w-full h-14 fixed top-0 right-0 left-0 bg-white shadow-sm border-b px-6 py-3 
+  <header class="w-full h-14 fixed z-[300] top-0 right-0 left-0 bg-white shadow-sm border-b px-6 py-3 
                 flex items-center justify-between">
     <!-- Logo -->
     <h1 class="text-xl font-bold text-blue-600">Facebook</h1>
@@ -22,9 +22,57 @@
       </a>
     </nav>
 
-    <!-- Actions (Notifications + Avatar) -->
-    <div class="flex z-[9999] items-center gap-4 relative">
-      <!-- Notifications -->
+    <!-- Actions (Messages + Notifications + Avatar) -->
+    <div class="flex items-center gap-4 relative">
+      <!-- Messages menu -->
+      <div>
+        <button
+          (click)="toggleMessages()"
+          class="text-gray-600 hover:text-blue-600 relative"
+        >
+          <i class="fa-brands fa-facebook-messenger text-2xl"></i>
+          <!-- badge -->
+          <span
+            *ngIf="unseenCountMessages > 0"
+            class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full px-1.5"
+            >{{ unseenCountMessages }}</span
+          >
+        </button>
+
+        <!-- Dropdown messages -->
+        <div
+        *ngIf="showMessages"
+        class="absolute right-0 top-10 mt-2 w-[380px] bg-white shadow-lg rounded-lg border flex flex-col"
+        >
+          <!-- Header -->
+          <p class="font-bold text-2xl mb-2 px-3 pt-3">Đoạn Chat</p>
+          <!-- Scrollable list -->
+          <div class="overflow-y-auto max-h-[550px] px-3">
+            <div *ngFor="let friend of allFriends" 
+                class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-lg cursor-pointer"
+                (click)="openConversation(friend)">
+              <div class="relative">
+                <app-avatar
+                  [avatarUrl]="friend.profile.avatarUrl"
+                  [width]="56"
+                  [height]="56"
+                  [isOnline]="isUserOnline(friend.id)"
+                  [lastOffline]="friend.lastOffline"
+                ></app-avatar>
+              </div>
+              <span class="text-sm font-medium text-gray-700">
+                {{ friend.profile.fullName }}
+              </span>
+            </div>
+          </div>
+          <!-- Footer (fixed, không scroll theo) -->
+          <div class="border-t text-center py-2 cursor-pointer hover:bg-gray-50">
+            <span class="text-blue-600 font-medium">Xem tất cả</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notifications menu -->
       <div>
         <button
           (click)="toggleNoti()"
@@ -33,9 +81,9 @@
           <i class="fa-regular fa-bell text-2xl"></i>
           <!-- badge -->
           <span
-            *ngIf="unseenCount > 0"
+            *ngIf="unseenCountNoti > 0"
             class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full px-1.5"
-            >{{ unseenCount }}</span
+            >{{ unseenCountNoti }}</span
           >
         </button>
 
@@ -51,12 +99,13 @@
         </div>
       </div>
 
-      <!-- Avatar -->
+      <!-- Avatar menu -->
       <div>
         <button (click)="toggleUserMenu()" class="flex items-center">
           <app-avatar
             [avatarUrl]="currentUser?.profile?.avatarUrl"
-            [customClass]="'w-9 h-9 rounded-full border'"
+            [height]="40"
+            [width]="40"
           ></app-avatar>
         </button>
 
@@ -75,5 +124,32 @@
       </div>
     </div>
   </header>
+</div>
 
+
+<!-- Popup Chat -->
+<!-- Hiển thị tối đa 3 popup -->
+@for (popup of openChats; track $index) {
+  <app-popup-chat
+    class="fixed bottom-0"
+    [style.right.px]="100 + $index * 340"
+    [popup]="popup"
+    [isOnline]="isUserOnline(popup.id)"
+    (closeChat)="closeConversation($event)">
+  </app-popup-chat>
+}
+
+<!-- Các popup bị thu gọn thành icon tròn -->
+<div class="fixed bottom-4 right-4 flex">
+  @for (popup of collapsedChats; track $index) {
+    <button 
+      class="w-12 h-12 rounded-full bg-blue-600 text-white shadow-lg flex items-center justify-center -mr-3 border-2 border-white"
+      (click)="expandConversation(popup)">
+      <app-avatar
+        [avatarUrl]="popup.profile.avatarUrl"
+        [width]="40"
+        [height]="40"
+      ></app-avatar>
+    </button>
+  }
 </div>
